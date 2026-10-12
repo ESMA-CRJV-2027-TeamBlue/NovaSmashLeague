@@ -1,7 +1,8 @@
 using UnityEngine;
 
-public class DebugVFXInput : MonoBehaviour
+public class DEBUG_VFXActivatorInput : MonoBehaviour
 {
+    [Tooltip("The VFXActivator to debug")]
     public VFXActivator vfxActivator;
     
     void Update()
