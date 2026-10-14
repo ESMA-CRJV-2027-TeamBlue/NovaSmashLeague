@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using TMPro;
 using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class GameParametersManager : MonoBehaviour
@@ -15,6 +17,8 @@ public class GameParametersManager : MonoBehaviour
     private bool _isActive;
 
     [SerializeField] private Canvas _window;
+    [SerializeField] private List<TMP_Dropdown> _dropdownSelectControllers;
+    private List<int> _listControllers;
 
     [SerializeField] private List<SO_PlayerInfos> _playersList;
     [SerializeField] private List<GameObject> _playersUI;
@@ -22,7 +26,31 @@ public class GameParametersManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        List<string> textsOptions = new List<string>();
         //_playerController.performed +=
+        int gamepadIndex = 1;
+        int keyboardIndex = 1;
+
+        for (int i = 0; i < InputSystem.devices.Count; i++)
+        {
+            _listControllers.Add(i);
+            if (InputSystem.devices[i].device is Gamepad)
+            {
+                textsOptions.Add("Gamepad " + gamepadIndex);
+                gamepadIndex++;
+            }
+            else if (InputSystem.devices[i].device is Keyboard)
+            {
+                textsOptions.Add("Keyboard " + keyboardIndex);
+                keyboardIndex++;
+            }
+        }
+
+        foreach (TMP_Dropdown dropdown in _dropdownSelectControllers)
+        {
+            dropdown.ClearOptions();
+            dropdown.AddOptions(textsOptions);
+        }
     }
 
     // Update is called once per frame
