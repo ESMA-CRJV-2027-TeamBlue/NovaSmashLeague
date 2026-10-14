@@ -13,14 +13,14 @@ public class AnimationStateSummary : MonoBehaviour
     int activeEnd;
     int totalFrames;
     int currentFrame;
-    ActionPhase phase = ActionPhase.None;
+    ActionKind phase = ActionKind.None;
 
-    public ActionPhase Phase => phase;
+    public ActionKind Phase => phase;
     public int CurrentFrame => currentFrame;
     public int TotalFrames => totalFrames;
-    public bool IsRunning => phase != ActionPhase.None;
+    public bool IsRunning => phase != ActionKind.None;
 
-    public event Action<ActionPhase> PhaseChanged;
+    public event Action<ActionKind> PhaseChanged;
     public event Action<ActionPhase> Interrupted;
 
     public bool Begin()

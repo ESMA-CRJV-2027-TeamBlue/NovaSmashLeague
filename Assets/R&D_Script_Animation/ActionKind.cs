@@ -2,9 +2,13 @@ using UnityEngine;
 
 public enum ActionPhase
 {
+
     None,
-    Startup,
-    Active,
+    StartUp,
+    Action,
+
     Recovery,
 
+    
 }
+
