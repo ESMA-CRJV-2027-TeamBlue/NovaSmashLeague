@@ -13,14 +13,14 @@ public class AnimationStateSummary : MonoBehaviour
     int activeEnd;
     int totalFrames;
     int currentFrame;
-    ActionKind phase = ActionKind.None;
+    ActionPhase phase = ActionPhase.None;
 
-    public ActionKind Phase => phase;
+    public ActionPhase Phase => phase;
     public int CurrentFrame => currentFrame;
     public int TotalFrames => totalFrames;
-    public bool IsRunning => phase != ActionKind.None;
+    public bool IsRunning => phase != ActionPhase.None;
 
-    public event Action<ActionKind> PhaseChanged;
+    public event Action<ActionPhase> PhaseChanged;
     public event Action<ActionPhase> Interrupted;
 
     public bool Begin()
@@ -37,7 +37,7 @@ public class AnimationStateSummary : MonoBehaviour
         totalFrames = frames.Total;
         currentFrame = 0;
 
-        ChangePhase(ActionPhase.Startup);
+        ChangePhase(ActionPhase.StartUp);
         return true;
     }
 
@@ -54,11 +54,11 @@ public class AnimationStateSummary : MonoBehaviour
         }
         else if (currentFrame <= startupEnd)
         {
-            ChangePhase(ActionPhase.Startup);
+            ChangePhase(ActionPhase.StartUp);
         }
         else if (currentFrame <= activeEnd)
         {
-            ChangePhase(ActionPhase.Active);
+            ChangePhase(ActionPhase.Action);
         }
         else
         {
