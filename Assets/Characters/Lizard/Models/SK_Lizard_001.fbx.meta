@@ -3,9 +3,14 @@ guid: c630eb4da208db446af6c91b2d2491fe
 ModelImporter:
   serializedVersion: 24600
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: m_Aerobicgirl_001
+    second: {fileID: 2100000, guid: ae30d3cfcffe45e4e937ddabdce107bc, type: 2}
   materials:
-    materialImportMode: 0
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
