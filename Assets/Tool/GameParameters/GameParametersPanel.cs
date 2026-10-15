@@ -19,11 +19,12 @@ public class GameParametersPanel : MonoBehaviour
     private Dictionary<string, SO_Character> _characterNameToSO = new Dictionary<string, SO_Character>();
     private Dictionary<string, int> _devicesNameToIndex = new Dictionary<string, int>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Called when object the panel is switching to enable
     void OnEnable()
     {
         InitDropDowns();
     }
+
 
     public void InitDropDowns()
     {
