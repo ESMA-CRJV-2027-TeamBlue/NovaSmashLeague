@@ -3,55 +3,87 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
+[Serializable]
+public class Cinematic
+{
+    public GameObject prefab;
+    public Transform pivot;
+}
+
 public class CinematicPlayer : MonoBehaviour
 {
-    public event Action currentCinematicStopped;
-    public event Action cinematicQueueDepleted;
+    public event Action OnCinematicQueueDepleted;
+    public event Action OnCinematicEnded;
     
     private PlayableDirector _currentCinematic;
-    private Queue<GameObject> _cinematicPrefabQueue;
+    private Queue<Cinematic> _cinematicQueue = new Queue<Cinematic>();
     
     /// <summary>
-    /// Instantiates a prefab that has a PlayableDirector component, and plays it.
-    /// Emits a signal when the cinematic ends
+    /// Uses a Cinematic to instantiate a prefab that has a PlayableDirector component, and plays it from the pivot point.
+    /// If the cinematic has no pivot, use this script's gameobject instead
+    /// If a cinematic is already playing, enqueues the cinematic instead.
     /// </summary>
-    /// <param name="prefab">The prefab that has a PlayableDirector component</param>
-    public void PlayCinematicFromPrefab(GameObject prefab)
+    /// <param name="cinematic">The Cinematic to play</param>
+    public void PlayCinematic(Cinematic cinematic)
     {
-        _currentCinematic = Instantiate(prefab, transform).GetComponent<PlayableDirector>();
+        // Don't interrupt current cinematic
+        if (_currentCinematic)
+        {
+            _cinematicQueue.Enqueue(cinematic);
+            return;
+        }
+
+        if (cinematic.pivot == null) cinematic.pivot = transform;
+        
+        _currentCinematic = Instantiate(cinematic.prefab, cinematic.pivot).GetComponent<PlayableDirector>();
+        if (_currentCinematic == null)
+        {
+            Debug.LogError($"Cinematic prefab '{cinematic.prefab.name}' has no PlayableDirector component!");
+            return;
+        }
         _currentCinematic.stopped += OnCinematicStopped;
         _currentCinematic.Play();
     }
 
     /// <summary>
-    /// Handle the end of a cinematic
+    /// Handle the end of a cinematic. Destroy related gameobject and start the next in queue. Emits an OnCinematicEnded event
     /// </summary>
-    /// <param name="_playableDirector"></param>
-    public void OnCinematicStopped(PlayableDirector _playableDirector)
+    /// <param name="_playableDirector">Required param from api, not used</param>
+    private void OnCinematicStopped(PlayableDirector _playableDirector)
     {
-        currentCinematicStopped?.Invoke();
-        Destroy(_currentCinematic.gameObject);
+        // Check in case it triggered from editor close 
+        if (_currentCinematic)
+        {
+            Destroy(_currentCinematic.gameObject);
+            _currentCinematic = null;
+        }
+        OnCinematicEnded?.Invoke();
+        PlayNextCinematicInQueue();
     }
 
-    public void EnqueueCinematics(List<GameObject> cinematicPrefabs)
+    /// <summary>
+    /// Set the cinematic queue to play a list of cinematics from prefabs with a PlayableDirector component.
+    /// Automatically starts to play the first cinematic.
+    /// </summary>
+    /// <param name="cinematicPrefabs">The list of prefabs that need to contain a PlayableDirector component</param>
+    public void EnqueueCinematics(List<Cinematic> cinematics)
     {
-        _cinematicPrefabQueue = new Queue<GameObject>(cinematicPrefabs);
+        _cinematicQueue = new Queue<Cinematic>(cinematics);
         PlayNextCinematicInQueue();
-        PlayCinematicFromPrefab(_cinematicPrefabQueue.Dequeue());
     }
 
     /// <summary>
     /// Try to launch the next cinematic in queue.
-    /// If there are no cinematic left, emits a CinematicQueueDepleted event
+    /// If there are no cinematic left, emits a CinematicQueueDepleted event instead
     /// </summary>
-    public void PlayNextCinematicInQueue()
+    private void PlayNextCinematicInQueue()
     {
-        if (_cinematicPrefabQueue.Count == 0)
+        if (_cinematicQueue.Count == 0)
         {
-            cinematicQueueDepleted?.Invoke();
+            OnCinematicQueueDepleted?.Invoke();
             return;
         }
         
-        PlayCinematicFromPrefab(_cinematicPrefabQueue.Dequeue());
+        PlayCinematic(_cinematicQueue.Dequeue());
     }
 }
