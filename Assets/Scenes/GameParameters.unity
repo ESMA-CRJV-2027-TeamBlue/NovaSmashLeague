@@ -911,7 +911,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1374381376}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
-        m_MethodName: InitDropDowns
+        m_MethodName: TransferDataToPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -923,7 +923,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1947699816}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
-        m_MethodName: InitDropDowns
+        m_MethodName: TransferDataToPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -935,7 +935,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1378549031}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
-        m_MethodName: InitDropDowns
+        m_MethodName: TransferDataToPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -947,7 +947,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2055238608}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
-        m_MethodName: InitDropDowns
+        m_MethodName: TransferDataToPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11215,9 +11215,10 @@ MonoBehaviour:
   _dropdownSelectDevice: {fileID: 603859248}
   _dropdownSelectTeam: {fileID: 1701487892}
   _dropdownSelectCharacter: {fileID: 542113422}
-  _playerPrefab: {fileID: 0}
+  _playerPrefab: {fileID: 297616699225431388, guid: 9c87b90560e6a6e4aa7e9f30a6ef168d, type: 3}
   _characters:
   - {fileID: 11400000, guid: 82e6161e105117e4b8d9b50536f3b16a, type: 2}
+  - {fileID: 11400000, guid: 87646d64c15899a4d88f698f1286b8ff, type: 2}
 --- !u!1 &1378549027
 GameObject:
   m_ObjectHideFlags: 0
@@ -11314,7 +11315,7 @@ MonoBehaviour:
   _dropdownSelectDevice: {fileID: 594125716}
   _dropdownSelectTeam: {fileID: 94576126}
   _dropdownSelectCharacter: {fileID: 1763118081}
-  _playerPrefab: {fileID: 0}
+  _playerPrefab: {fileID: 297616699225431388, guid: 9c87b90560e6a6e4aa7e9f30a6ef168d, type: 3}
   _characters:
   - {fileID: 11400000, guid: 82e6161e105117e4b8d9b50536f3b16a, type: 2}
 --- !u!1 &1394488747
@@ -16157,7 +16158,7 @@ MonoBehaviour:
   _dropdownSelectDevice: {fileID: 1345387610}
   _dropdownSelectTeam: {fileID: 176024164}
   _dropdownSelectCharacter: {fileID: 2139082397}
-  _playerPrefab: {fileID: 0}
+  _playerPrefab: {fileID: 297616699225431388, guid: 9c87b90560e6a6e4aa7e9f30a6ef168d, type: 3}
   _characters:
   - {fileID: 11400000, guid: 82e6161e105117e4b8d9b50536f3b16a, type: 2}
 --- !u!1 &1947992267
@@ -16855,7 +16856,7 @@ MonoBehaviour:
   _dropdownSelectDevice: {fileID: 254573775}
   _dropdownSelectTeam: {fileID: 1044174938}
   _dropdownSelectCharacter: {fileID: 1828906397}
-  _playerPrefab: {fileID: 0}
+  _playerPrefab: {fileID: 297616699225431388, guid: 9c87b90560e6a6e4aa7e9f30a6ef168d, type: 3}
   _characters:
   - {fileID: 11400000, guid: 82e6161e105117e4b8d9b50536f3b16a, type: 2}
 --- !u!1 &2055848778

@@ -6,12 +6,11 @@ public class PlayerInfos : MonoBehaviour
     private int _deviceId;
     private SO_Character _character;
 
-    private MeshFilter _meshFilter;
+    [SerializeField] private MeshFilter _meshFilter;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _meshFilter = GetComponent<MeshFilter>();
     }
 
     // Update is called once per frame

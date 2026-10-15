@@ -127,3 +127,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a5615ac4242d0d428fc0be0afd0f579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInfos
+  _meshFilter: {fileID: 4622174827159454305}

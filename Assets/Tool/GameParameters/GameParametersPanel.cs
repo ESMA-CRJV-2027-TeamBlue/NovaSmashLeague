@@ -43,7 +43,7 @@ public class GameParametersPanel : MonoBehaviour
     public void TransferDataToPlayer()
     {
         GameObject player = Instantiate(_playerPrefab, new Vector3(1000f,1000f,1000f), new Quaternion(0f,0f,0f,0f));
-        player.GetComponent<PlayerInfos>().SetNewPlayerInfos(_team, _deviceId, _character);
+        player.GetComponent<PlayerInfos>().SetNewPlayerInfos(GetNewTeam(), GetNewDeviceId(), GetNewCharacter());
         player.tag = _text.text;
         DontDestroyOnLoad(player);
     }
@@ -78,18 +78,23 @@ public class GameParametersPanel : MonoBehaviour
     }
 
 
-    public void AssignedNewDeviceFromName()
+    private int GetNewDeviceId()
     {
-        _devicesNameToIndex.TryGetValue(_dropdownSelectDevice.captionText.text, out var indexCurretnDevices);
-
-        Gamepad gamepad = InputSystem.devices[indexCurretnDevices] as Gamepad;
-        if (gamepad != null)
+        if (_devicesNameToIndex.TryGetValue(_dropdownSelectDevice.captionText.text, out var indexCurretnDevices))
         {
-            StartCoroutine(VibrateGamepad(gamepad));
-        }
+            Gamepad gamepad = InputSystem.devices[indexCurretnDevices] as Gamepad;
+            if (gamepad != null)
+            {
+                StartCoroutine(VibrateGamepad(gamepad));
+            }
 
-        // TODO assigned gamepad to player
-        _deviceId = indexCurretnDevices;
+            // TODO assigned gamepad to player
+            return indexCurretnDevices;
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     private System.Collections.IEnumerator VibrateGamepad(Gamepad gamepad)
@@ -116,12 +121,16 @@ public class GameParametersPanel : MonoBehaviour
         _dropdownSelectCharacter.AddOptions(textsOptions);
     }
 
-    public void AssignedNewCharacter()
+    private SO_Character GetNewCharacter()
     {
-        _characterNameToSO.TryGetValue(_dropdownSelectCharacter.captionText.text, out var character);
-
-        // TODO assigned character to player
-        _character = character;
+        if (_characterNameToSO.TryGetValue(_dropdownSelectCharacter.captionText.text, out var character))
+        {
+            return character;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     #endregion
@@ -140,17 +149,16 @@ public class GameParametersPanel : MonoBehaviour
         _dropdownSelectTeam.AddOptions(textsOptions);
     }
 
-    public void AssignedNewTeam()
+    private Team GetNewTeam()
     {
         foreach (Team team in Enum.GetValues(typeof(Team)))
         {
             if (_dropdownSelectTeam.captionText.text == team.ToString())
             {
-                // TODO Assigned team
-                // ...
-                _team = team;
+                return team;
             }
         }
+        return Team.TeamB;
     }
 
     #endregion
