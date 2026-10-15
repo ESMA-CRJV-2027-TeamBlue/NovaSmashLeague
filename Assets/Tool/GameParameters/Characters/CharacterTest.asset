@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d048649b40a4c1449d9d898bf61beb8, type: 3}
   m_Name: CharacterTest
   m_EditorClassIdentifier: Assembly-CSharp::SO_Character
+  characterName: TestAerobicGirl
   _meshCharacter: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
