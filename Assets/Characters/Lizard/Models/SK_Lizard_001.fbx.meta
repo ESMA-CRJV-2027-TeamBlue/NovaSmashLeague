@@ -9,6 +9,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: m_Aerobicgirl_001
     second: {fileID: 2100000, guid: ae30d3cfcffe45e4e937ddabdce107bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: m_face_001
+    second: {fileID: 2100000, guid: bcb2249f6e205944b9e15091da0ed38d, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
