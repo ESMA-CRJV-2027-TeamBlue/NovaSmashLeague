@@ -5,10 +5,12 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class GameParametersPanel : MonoBehaviour
 {
     [Header("Dropdown Items :")]
+    [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private TMP_Dropdown _dropdownSelectDevice;
     [SerializeField] private TMP_Dropdown _dropdownSelectTeam;
     [SerializeField] private TMP_Dropdown _dropdownSelectCharacter;
@@ -19,18 +21,31 @@ public class GameParametersPanel : MonoBehaviour
     private Dictionary<string, SO_Character> _characterNameToSO = new Dictionary<string, SO_Character>();
     private Dictionary<string, int> _devicesNameToIndex = new Dictionary<string, int>();
 
+    #region PlayerData
+    private Team _team;
+    private int _deviceId;
+    private SO_Character _character;
+    #endregion
+
     // Called when object the panel is switching to enable
     void OnEnable()
     {
         InitDropDowns();
     }
 
-
     public void InitDropDowns()
     {
         InitDropdownSelectDevicesOptions();
         InitDropdownSelectCharacterOptions();
         InitDropdownSelectTeamOptions();
+    }
+
+    public void TransferDataToPlayer()
+    {
+        GameObject player = Instantiate(_playerPrefab, new Vector3(1000f,1000f,1000f), new Quaternion(0f,0f,0f,0f));
+        player.GetComponent<PlayerInfos>().SetNewPlayerInfos(_team, _deviceId, _character);
+        player.tag = _text.text;
+        DontDestroyOnLoad(player);
     }
 
     #region Dropdown Select Device
@@ -74,7 +89,7 @@ public class GameParametersPanel : MonoBehaviour
         }
 
         // TODO assigned gamepad to player
-        //...
+        _deviceId = indexCurretnDevices;
     }
 
     private System.Collections.IEnumerator VibrateGamepad(Gamepad gamepad)
@@ -106,7 +121,7 @@ public class GameParametersPanel : MonoBehaviour
         _characterNameToSO.TryGetValue(_dropdownSelectCharacter.captionText.text, out var character);
 
         // TODO assigned character to player
-        //...
+        _character = character;
     }
 
     #endregion
@@ -133,6 +148,7 @@ public class GameParametersPanel : MonoBehaviour
             {
                 // TODO Assigned team
                 // ...
+                _team = team;
             }
         }
     }

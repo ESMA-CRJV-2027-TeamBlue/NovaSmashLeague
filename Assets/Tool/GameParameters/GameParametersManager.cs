@@ -1,22 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using TMPro;
 using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class GameParametersManager : MonoBehaviour
 {
+    [SerializeField] private TMP_Dropdown _dropdownSelectScene;
     [SerializeField] private InputActionReference _playerTryToConect;
     public bool openGameParametersIsPressed;
     private bool _isActive;
 
     [SerializeField] private Canvas _window;
+
+    private void Start()
+    {
+        InitDropdownSelectScene();
+    }
 
     // Update is called once per frame
     void Update()
@@ -56,5 +64,27 @@ public class GameParametersManager : MonoBehaviour
         {
             _window.enabled = true;
         }
+    }
+
+
+    private void InitDropdownSelectScene()
+    {
+        List<string> scenes = new List<string>(); 
+        int sceneIndex = SceneManager.sceneCountInBuildSettings;
+        for (int i = 0; i < sceneIndex; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+            string sceneName = Path.GetFileNameWithoutExtension(scenePath);
+            scenes.Add(sceneName);
+        }
+
+        _dropdownSelectScene.ClearOptions();
+        _dropdownSelectScene.AddOptions(scenes);
+    }
+
+    public void StartButton()
+    {
+        string sceneName = _dropdownSelectScene.captionText.text;
+        SceneManager.LoadSceneAsync(sceneName);
     }
 }
