@@ -1,72 +1,26 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using TMPro;
-using TMPro.EditorUtilities;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class GameParametersManager : MonoBehaviour
 {
+    #region UI Items
+    [Header("UI Items :")]
+    [Tooltip("Dropdown selection scenes.")]
     [SerializeField] private TMP_Dropdown _dropdownSelectScene;
-    [SerializeField] private InputActionReference _playerTryToConect;
-    public bool openGameParametersIsPressed;
-    private bool _isActive;
-
-    [SerializeField] private Canvas _window;
+    #endregion
 
     private void Start()
     {
         InitDropdownSelectScene();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        /*
-        if (_playerTryToConect.action.WasPressedThisFrame())
-        {
-            //CheckInputDevicePressed(_playerController.controls.);
-            
-            //Debug.Log("Name : " + _playerTryToConect.action.activeControl.device);
-            InputDevice device = _playerTryToConect.action.activeControl.device;
-            /*
-            Debug.Log("ID : " + device.deviceId);
-            bool test = (device.deviceId == InputSystem.devices[3].deviceId);
-            Debug.Log("Bool : "+  test );
-            Debug.Log("index : " + FindIndexDevice(device));
-            
-            if (CheckDeviceIsUsed(FindIndexDevice(device)))
-            {
-                CreateNewPlayer(FindIndexDevice(device));
-            }
-        }
-        */
-        if (openGameParametersIsPressed)
-        {
-            OpenCloseMenu();
-        }
-    }
-
-    private void OpenCloseMenu()
-    {
-        if (_window.isActiveAndEnabled)
-        {
-            _window.enabled = false;
-        }
-        else
-        {
-            _window.enabled = true;
-        }
-    }
-
-
+    #region Dropdown Selection Scenes
+    /// <summary>
+    /// Initialisation of the Dropdown Selection Scene.
+    /// </summary>
     private void InitDropdownSelectScene()
     {
         List<string> scenes = new List<string>(); 
@@ -82,9 +36,13 @@ public class GameParametersManager : MonoBehaviour
         _dropdownSelectScene.AddOptions(scenes);
     }
 
-    public void StartButton()
+    /// <summary>
+    /// Loading the selected scene.
+    /// </summary>
+    public void LoadSelectScene()
     {
         string sceneName = _dropdownSelectScene.captionText.text;
         SceneManager.LoadSceneAsync(sceneName);
     }
+    #endregion
 }
