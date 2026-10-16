@@ -110,3 +110,7 @@ InitTestScene*.unity*
 
 # Idea folder
 /.idea/
+
+# Unity samples
+Assets/Samples
+Assets/Samples.meta
