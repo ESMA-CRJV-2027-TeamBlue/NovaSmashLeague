@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: MI_Lizard_Outline_001
   m_Shader: {fileID: 4800000, guid: 6a06b7a4037b8c240a315b45657ed758, type: 3}
-  m_Parent: {fileID: 2100000, guid: cacfc3830fd81fe41b764e434d196f9b, type: 2}
+  m_Parent: {fileID: 2100000, guid: c78696b1101c0d64584292d658f7c226, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _USE_VERTEX_COLOR
