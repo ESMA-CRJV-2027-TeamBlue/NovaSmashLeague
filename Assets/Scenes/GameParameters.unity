@@ -320,7 +320,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1162743960}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
         m_MethodName: TransferDataToPlayer
         m_Mode: 1
@@ -332,7 +332,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1096240663}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
         m_MethodName: TransferDataToPlayer
         m_Mode: 1
@@ -344,7 +344,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 622784510}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
         m_MethodName: TransferDataToPlayer
         m_Mode: 1
@@ -358,7 +358,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 285877325}
         m_TargetAssemblyTypeName: GameParametersManager, Assembly-CSharp
-        m_MethodName: LoadSelectScene
+        m_MethodName: LoadSelectedScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -501,7 +501,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1162743960}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
         m_MethodName: InitDropDowns
         m_Mode: 1
@@ -513,7 +513,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1096240663}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
         m_MethodName: InitDropDowns
         m_Mode: 1
@@ -525,7 +525,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 622784510}
         m_TargetAssemblyTypeName: GameParametersPanel, Assembly-CSharp
         m_MethodName: InitDropDowns
         m_Mode: 1
@@ -1097,6 +1097,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600867051}
   m_CullTransparentMesh: 1
+--- !u!114 &622784510 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7025550079024681911, guid: 4ffb5d9d03040404693c219b80f17151, type: 3}
+  m_PrefabInstance: {fileID: 24525639}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adaed313ed88b0f4bb6de46b707857ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameParametersPanel
 --- !u!1 &708801974
 GameObject:
   m_ObjectHideFlags: 0
@@ -1817,6 +1828,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6653781698213784271, guid: 4ffb5d9d03040404693c219b80f17151, type: 3}
   m_PrefabInstance: {fileID: 1096240661}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1096240663 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7025550079024681911, guid: 4ffb5d9d03040404693c219b80f17151, type: 3}
+  m_PrefabInstance: {fileID: 1096240661}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adaed313ed88b0f4bb6de46b707857ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameParametersPanel
 --- !u!1 &1130214308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2002,6 +2024,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6653781698213784271, guid: 4ffb5d9d03040404693c219b80f17151, type: 3}
   m_PrefabInstance: {fileID: 1162743958}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1162743960 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7025550079024681911, guid: 4ffb5d9d03040404693c219b80f17151, type: 3}
+  m_PrefabInstance: {fileID: 1162743958}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adaed313ed88b0f4bb6de46b707857ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameParametersPanel
 --- !u!224 &1374381373 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6653781698213784271, guid: 4ffb5d9d03040404693c219b80f17151, type: 3}
