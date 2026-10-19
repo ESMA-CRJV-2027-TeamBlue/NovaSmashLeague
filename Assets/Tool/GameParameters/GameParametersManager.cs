@@ -25,7 +25,7 @@ public class GameParametersManager : MonoBehaviour
     {
         List<string> scenes = new List<string>(); 
         int sceneIndex = SceneManager.sceneCountInBuildSettings;
-        for (int i = 0; i < sceneIndex; i++)
+        for (int i = 1; i < sceneIndex; i++)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
             string sceneName = Path.GetFileNameWithoutExtension(scenePath);

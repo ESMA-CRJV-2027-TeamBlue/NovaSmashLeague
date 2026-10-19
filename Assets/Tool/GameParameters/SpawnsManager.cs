@@ -38,7 +38,11 @@ public class SpawnsManager : MonoBehaviour
         for (int i = 1; i < 5; i++)
         {
             string tag = "Player " + i.ToString();
-            _players.Add(GameObject.FindWithTag(tag));
+            GameObject player = GameObject.FindWithTag(tag); 
+            if (player != null)
+            {
+                _players.Add(player);
+            }
         }
     }
 
