@@ -104,6 +104,6 @@ public class AnimationStateSummary : MonoBehaviour
     void OnGUI()
     {
         if (!showDebug) return;
-        GUI.Label(new Rect(debugPosition.x, debugPosition.y, 400f, 24f), name + ":" + phase + "frame" + currentFrame + "/" + totalFrames);
+        DebugHud.Label($"[FRAMES] {name} : {phase} {currentFrame}/{totalFrames}");
     }
 }

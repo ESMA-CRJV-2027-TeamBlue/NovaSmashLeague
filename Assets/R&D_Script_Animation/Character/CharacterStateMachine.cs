@@ -4,6 +4,32 @@ using UnityEngine;
 
 public class CharacterStateMachine : MonoBehaviour
 {
+
+    [Header("Debug / Test)")]
+    [SerializeField] int testFrames = 180;
+
+    [SerializeField] AttackData testAttack;
+    public AttackData CurrentAttack { get; private set; }
+
+    [ContextMenu("Test : Begin Action")]
+    void TestBeginAction() { if (Application.isPlaying) TryStartAction();  }
+    [ContextMenu("Test : Hit (30frames)")]
+    void TestHit() { if (Application.isPlaying) ApplyHit(testFrames); }
+    [ContextMenu("Test : Freeze")]
+    void TestFreeze() { if (Application.isPlaying) Freeze(testFrames); }
+    [ContextMenu("Test : FreezeMove")]
+    void TestFreezeMove() { if (Application.isPlaying) FreezeMove(testFrames); }
+
+    [ContextMenu("Test : Action puis Freeze")]
+    void TestActionThenFreeze()
+    {
+        if (!Application.isPlaying) return;
+        TryStartAction();
+        Invoke(nameof(TestFreeze), 0.5f);
+    }
+
+
+
     [SerializeField] AnimationStateSummary animationSummary;
     [SerializeField] bool showDebug = true;
     [SerializeField] Vector2 debugPosition = new Vector2(10f, 40f);
@@ -56,10 +82,24 @@ public class CharacterStateMachine : MonoBehaviour
         EndTimedState();
     }
 
+    public bool TryStartAction(AttackData attack)
+
+    {
+        if (attack == null || !CanAct || animationSummary == null) return false;
+        if (!animationSummary.Begin(attack.frames)) return false;
+
+        CurrentAttack = attack;
+        return true;
+    }
+
     public bool TryStartAction()
     {
-        if (!CanAct || animationSummary == null) return false;
-        return animationSummary.Begin();
+        if (testAttack == null)
+        {
+            Debug.LogWarning($"{name} : aucun 'Test Attack' assigné dans CharacterStaeMachine");
+            return false;
+        }
+        return TryStartAction(testAttack);
     }
 
     public void ApplyHit(int stunFrames)
@@ -117,9 +157,9 @@ public class CharacterStateMachine : MonoBehaviour
 
     void OnDied()
     {
-        animationSummary?.Interrupt();
         timedFramesLeft = -1;
         SetState(CharacterState.Dead);
+        animationSummary?.Interrupt();
     }
 
     void EndTimedState()
@@ -136,14 +176,21 @@ public class CharacterStateMachine : MonoBehaviour
 
         var old = Current;
         Current = newState;
-        if (showDebug) Debug.Log($"{name} : {old} -> {newState}");
+        if (newState == CharacterState.Free
+            || newState == CharacterState.Hit
+            || newState == CharacterState.FreezeMove
+            || newState == CharacterState.Dead)
+            CurrentAttack = null;
+
+        if (showDebug) Debug.Log($"{name} : {old} -> {newState} [t = {Time.fixedTime:F3}s");
         StateChanged?.Invoke(old, newState);
     }
 
     void OnGUI()
     {
         if (!showDebug) return;
-        GUI.Label(new Rect(debugPosition.x, debugPosition.y, 400f, 24f), $"{name} state : {Current}");
-        
+        string timer = timedFramesLeft >= 0 ? $" (reste {timedFramesLeft}f)" : "";
+        string atk = CurrentAttack != null ? $" | {CurrentAttack.attackName}" : "";
+        DebugHud.Label($"[ETAT] {name} : {Current}{timer}{atk}");
     }
 }
