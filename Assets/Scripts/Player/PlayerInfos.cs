@@ -5,20 +5,15 @@ public class PlayerInfos : MonoBehaviour
     private Team _team;
     private int _deviceId;
     private SO_Character _character;
+    [Tooltip("GameObject visuel du personnage.")]
+    [SerializeField] private GameObject _characterVisual;
 
-    [SerializeField] private MeshFilter _meshFilter;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Actualize player's informations set in parameters.
+    /// </summary>
+    /// <param name="newTeam">New player's team apartenece.</param>
+    /// <param name="newDeviceId">New player's controller index.</param>
+    /// <param name="_newCharacter">New player's character.</param>
     public void SetNewPlayerInfos(Team newTeam, int newDeviceId, SO_Character _newCharacter)
     {
         _team = newTeam;
@@ -27,8 +22,11 @@ public class PlayerInfos : MonoBehaviour
         LoadCharacterInfos();
     }
 
+    /// <summary>
+    /// Set scriptable object character's informations.
+    /// </summary>
     private void LoadCharacterInfos()
     {
-        _meshFilter.mesh = _character._meshCharacter;
+        _characterVisual = _character.visualCharacter;
     }
 }

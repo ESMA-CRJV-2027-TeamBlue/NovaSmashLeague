@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,10 +6,10 @@ public class SpawnsManager : MonoBehaviour
 {
     #region Players Spawn
     [Header("Players Spawn :")]
-    [Tooltip("List of Players Gameobject playing.")]
     private List<GameObject> _players = new List<GameObject>();
     [Tooltip("List of Spawning points fo Players.")]
     [SerializeField] private List<Transform> _spawnsPlayer;
+    private const int _maxNumPlayers = 4;
     #endregion
 
     #region Ball Spawn
@@ -35,7 +34,7 @@ public class SpawnsManager : MonoBehaviour
     /// </summary>
     private void FindPlayers()
     {
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < _maxNumPlayers + 1; i++)
         {
             string tag = "Player " + i.ToString();
             GameObject player = GameObject.FindWithTag(tag); 
@@ -64,7 +63,7 @@ public class SpawnsManager : MonoBehaviour
 
     #region Ball
     /// <summary>
-    /// Spawn the ball
+    /// Spawn the ball at the spawn point of the ball.
     /// </summary>
     private void SpawnBall()
     {

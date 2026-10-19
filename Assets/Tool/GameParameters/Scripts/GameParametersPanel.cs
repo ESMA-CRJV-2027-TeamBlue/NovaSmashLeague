@@ -27,18 +27,13 @@ public class GameParametersPanel : MonoBehaviour
     [SerializeField] private GameObject _playerPrefab;
     [Tooltip("List Scriptable Object Characters")]
     [SerializeField] private List<SO_Character> _characters;
-    [Tooltip("Dictionnary with Key = Name of the Character and Value = ScriptableObject of the Character")]
     private Dictionary<string, SO_Character> _characterNameToSO = new Dictionary<string, SO_Character>();
-    [Tooltip("Dictionnary with Key = Device's name and Value = Device's Index")]
     private Dictionary<string, int> _devicesNameToIndex = new Dictionary<string, int>();
     #endregion
 
     #region PlayerData
-    [Tooltip("Enum team ment to be transfered to the player.")]
     private Team _team;
-    [Tooltip("Device's Index ment to be transfered to the player.")]
     private int _deviceId;
-    [Tooltip("Scriptable Object character ment to be transfered to the player.")]
     private SO_Character _character;
     #endregion
 
@@ -170,7 +165,7 @@ public class GameParametersPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// Get the character.
+    /// Get the Scriptable Object of the character selected.
     /// </summary>
     /// <returns>Return null or the character selected.</returns>
     private SO_Character GetNewCharacter()
