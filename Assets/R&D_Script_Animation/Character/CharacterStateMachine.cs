@@ -39,7 +39,7 @@ public class CharacterStateMachine : MonoBehaviour
     int timedFramesLeft = -1;
 
     public CharacterState Current { get; private set; } = CharacterState.Free;
-
+    
     public event Action<CharacterState, CharacterState> StateChanged;
 
     public bool IsDead => Current == CharacterState.Dead;
@@ -106,9 +106,9 @@ public class CharacterStateMachine : MonoBehaviour
     {
         if (IsDead || Current == CharacterState.Freeze) return;
 
-        animationSummary?.Interrupt();
         SetState(CharacterState.Hit);
         timedFramesLeft = stunFrames;
+        animationSummary?.Interrupt();
     }
 
     public void Freeze(int frames = -1)
@@ -169,7 +169,7 @@ public class CharacterStateMachine : MonoBehaviour
         else if (Current == CharacterState.Hit || Current == CharacterState.FreezeMove)
             SetState(CharacterState.Free);
     }
-
+    
     void SetState(CharacterState newState)
     {
         if (Current == CharacterState.Dead || Current == newState) return;
