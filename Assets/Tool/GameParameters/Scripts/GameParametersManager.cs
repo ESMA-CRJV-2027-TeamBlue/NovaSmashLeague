@@ -19,7 +19,7 @@ public class GameParametersManager : MonoBehaviour
 
     #region Dropdown Selection Scenes
     /// <summary>
-    /// Initialisation of the Dropdown Selection Scene.
+    /// Initialisation of the Dropdown Selection Scene options, from the build scene list.
     /// </summary>
     private void InitDropdownSelectScene()
     {
