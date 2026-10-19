@@ -39,7 +39,7 @@ public class GameParametersManager : MonoBehaviour
     /// <summary>
     /// Loading the selected scene.
     /// </summary>
-    public void LoadSelectScene()
+    public void LoadSelectedScene()
     {
         string sceneName = _dropdownSelectScene.captionText.text;
         SceneManager.LoadSceneAsync(sceneName);

@@ -23,7 +23,7 @@ public class PlayerInfos : MonoBehaviour
     }
 
     /// <summary>
-    /// Set scriptable object character's informations.
+    /// Set visual character's informations from the scriptable object character.
     /// </summary>
     private void LoadCharacterInfos()
     {

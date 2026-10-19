@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,7 +26,7 @@ public class GameParametersPanel : MonoBehaviour
     [Header("Gameplay Items :")]
     [Tooltip("Prefab Player.")]
     [SerializeField] private GameObject _playerPrefab;
-    [Tooltip("List Scriptable Object Characters")]
+    [Tooltip("List of playable characters.")]
     [SerializeField] private List<SO_Character> _characters;
     private Dictionary<string, SO_Character> _characterNameToSO = new Dictionary<string, SO_Character>();
     private Dictionary<string, int> _devicesNameToIndex = new Dictionary<string, int>();
@@ -38,9 +39,6 @@ public class GameParametersPanel : MonoBehaviour
     #endregion
 
     #region Initialisation UI/player
-    /// <summary>
-    /// Called when object the panel is switching to enable 
-    /// </summary>
     void OnEnable()
     {
         InitDropDowns();
@@ -73,7 +71,7 @@ public class GameParametersPanel : MonoBehaviour
 
     #region Dropdown Select Device
     /// <summary>
-    /// Initialise the UI Dropdown of selection Device.
+    /// Initialise the UI Dropdown of selection Device options, with all devices connected.
     /// </summary>
     private void InitDropdownSelectDevicesOptions()
     {
@@ -108,7 +106,7 @@ public class GameParametersPanel : MonoBehaviour
     /// <returns>Return -1 if null or the correct Index of the device.</returns>
     private int GetNewDeviceId()
     {
-        if (_devicesNameToIndex.TryGetValue(_dropdownSelectDevice.captionText.text, out var indexCurretnDevices))
+        if (_devicesNameToIndex.TryGetValue(_dropdownSelectDevice.captionText.text, out int indexCurretnDevices))
         {
             return indexCurretnDevices;
         }
@@ -123,7 +121,7 @@ public class GameParametersPanel : MonoBehaviour
     /// </summary>
     public void FeedBackSelectionDevice()
     {
-        if (_devicesNameToIndex.TryGetValue(_dropdownSelectDevice.captionText.text, out var indexCurretnDevices))
+        if (_devicesNameToIndex.TryGetValue(_dropdownSelectDevice.captionText.text, out int indexCurretnDevices))
         {
             Gamepad gamepad = InputSystem.devices[indexCurretnDevices] as Gamepad;
             if (gamepad != null)
@@ -138,7 +136,7 @@ public class GameParametersPanel : MonoBehaviour
     /// </summary>
     /// <param name="gamepad">gamepad to make vibrate</param>
     /// <returns>None</returns>
-    private System.Collections.IEnumerator VibrateGamepad(Gamepad gamepad)
+    private IEnumerator VibrateGamepad(Gamepad gamepad)
     {
         gamepad.SetMotorSpeeds(0.5f, 0.5f);
         yield return new WaitForSeconds(0.5f);
