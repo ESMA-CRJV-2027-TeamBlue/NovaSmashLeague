@@ -1,38 +1,54 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
+/// <summary>
+/// Réagit à la mort du personnage en lançant l'animation de mort.
+/// Cherche un <see cref="IDeathSource"/> sur le personnage ou ses parents.
+/// </summary>
 public class DeathHandler : MonoBehaviour
 {
-    [SerializeField] AnimationStateSummary state;
-    [SerializeField] Animator animator;
-    [SerializeField] string deathTrigger = "Die";
-    IDeathSource source;
-    int deathParameter;
+    #region Paramètres
+    [Header("Animation de mort")]
+    [Tooltip("Animator du personnage. Peut rester vide tant qu'il n'y a pas d'Animator.")]
+    [FormerlySerializedAs("animator")]
+    [SerializeField] private Animator _animator;
 
-    public bool IsDead => source != null && source.IsDead;
+    [Tooltip("Nom du trigger de l'Animator déclenché à la mort.")]
+    [FormerlySerializedAs("deathTrigger")]
+    [SerializeField] private string _deathTrigger = "Die";
+    #endregion
 
-    void Awake()
+    private IDeathSource _source;
+    private int _deathParameter;
+
+    /// <summary>Vrai si la source de mort indique que le personnage est mort.</summary>
+    public bool IsDead => _source != null && _source.IsDead;
+
+    /// <summary>Récupère la source de mort et prépare le paramètre de l'Animator.</summary>
+    private void Awake()
     {
-        source = GetComponentInParent<IDeathSource>();
-        deathParameter = Animator.StringToHash(deathTrigger);
+        _source = GetComponentInParent<IDeathSource>();
+        _deathParameter = Animator.StringToHash(_deathTrigger);
 
-        if (source == null)
-            Debug.LogWarning("DeathHandler sur" + name + " : aucun IDeathSource trouvé, la mort ne sera pas détectée", this);
+        if (_source == null)
+            Debug.LogWarning("DeathHandler sur " + name + " : aucun IDeathSource trouvé, la mort ne sera jamais déclenchée");
     }
 
-    void OnEnable()
+    /// <summary>S'abonne à l'évènement de mort.</summary>
+    private void OnEnable()
     {
-        if (source != null) source.Died += OnDied;
+        if (_source != null) _source.Died += OnDied;
     }
 
-    void OnDisable()
+    /// <summary>Se désabonne de l'évènement de mort.</summary>
+    private void OnDisable()
     {
-        if (source != null) source.Died -= OnDied;
+        if (_source != null) _source.Died -= OnDied;
     }
 
-    void OnDied()
+    /// <summary>Déclenche l'animation de mort si un Animator est assigné.</summary>
+    private void OnDied()
     {
-        Debug.Log("DeathHandler : OnDied recu, state = " + (state != null ? state.name : "VIDE"));
-        if (state != null) state.Interrupt();
-        if (animator != null) animator.SetTrigger(deathParameter);
+        if (_animator != null) _animator.SetTrigger(_deathParameter);
     }
 }
