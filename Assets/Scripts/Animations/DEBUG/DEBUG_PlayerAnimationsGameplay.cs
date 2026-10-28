@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DEBUG_PlayerAnimation : MonoBehaviour
+public class DEBUG_PlayerAnimationsGameplay : MonoBehaviour
 {
     [Header("Debug state")]
     [Tooltip("Current state of freeze")]
@@ -13,8 +13,8 @@ public class DEBUG_PlayerAnimation : MonoBehaviour
     public bool flipInAir;
 
     [Header("Dependencies")]
-    [Tooltip("The PlayerAnimation to debug")]
-    public PlayerAnimation playerAnimation;
+    [Tooltip("The PlayerAnimationsGameplay to debug")]
+    public PlayerAnimationsGameplay playerAnimationsGameplay;
 
     /// <summary>
     /// Debug1: flipFreeze
@@ -33,44 +33,44 @@ public class DEBUG_PlayerAnimation : MonoBehaviour
         {
             flipFreeze = !flipFreeze;
             if (flipFreeze)
-                playerAnimation.Freeze();
+                playerAnimationsGameplay.Freeze();
             else
-                playerAnimation.Unfreeze();
+                playerAnimationsGameplay.Unfreeze();
         }
         else if (Input.GetButtonDown("Debug2"))
         {
             flipDead = !flipDead;
-            playerAnimation.SetDead(flipDead);
+            playerAnimationsGameplay.SetDead(flipDead);
         }
         else if (Input.GetButtonDown("Debug3"))
         {
             flipRunning = !flipRunning;
-            playerAnimation.SetRunning(flipRunning);
+            playerAnimationsGameplay.SetRunning(flipRunning);
         }
         else if (Input.GetButtonDown("Debug4"))
         {
             flipInAir = !flipInAir;
-            playerAnimation.SetInAir(flipInAir);
+            playerAnimationsGameplay.SetInAir(flipInAir);
         }
         else if (Input.GetButtonDown("Debug5"))
         {
-            playerAnimation.Hit();
+            playerAnimationsGameplay.Hit();
         }
         else if (Input.GetButtonDown("Debug6"))
         {
-            playerAnimation.Jump();
+            playerAnimationsGameplay.Jump();
         }
         else if (Input.GetButtonDown("Debug7"))
         {
-            playerAnimation.PlayAttack1();
+            playerAnimationsGameplay.PlayAttack1();
         }
         else if (Input.GetButtonDown("Debug8"))
         {
-            playerAnimation.PlayAttack2();
+            playerAnimationsGameplay.PlayAttack2();
         }
         else if (Input.GetButtonDown("Debug9"))
         {
-            playerAnimation.PlayDefense();
+            playerAnimationsGameplay.PlayDefense();
         }
     }
 }
