@@ -9,6 +9,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: M_Ball_Trail_001
     second: {fileID: 2100000, guid: 3ed4f4558f56f884a847158990c63c29, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Ball_Trail_004
+    second: {fileID: 2100000, guid: 3ed4f4558f56f884a847158990c63c29, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
