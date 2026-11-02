@@ -259,11 +259,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 705943229387816086, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -19.06
+      value: 7.8
       objectReference: {fileID: 0}
     - target: {fileID: 705943229387816086, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 33.31
+      value: 20.4
       objectReference: {fileID: 0}
     - target: {fileID: 705943229387816086, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -291,6 +291,42 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 705943229387816086, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1514986551568185762, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1514986551568185762, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -23.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081261314576024339, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081261314576024339, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081261314576024339, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Name
+      value: Intensity
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081261314576024339, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Value
+      value: 6.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081261314576024339, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Name
+      value: Velocity
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081261314576024339, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Overridden
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081261314576024339, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Overridden
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7012166578094020314, guid: ba893de68b0e90749aad51bef74084f7, type: 3}
