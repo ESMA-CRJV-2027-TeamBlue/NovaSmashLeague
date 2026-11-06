@@ -654,7 +654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DEBUG_RigidbodyVelocitySetter
   rb: {fileID: 427430800}
-  speed: 50
+  speed: 80
 --- !u!4 &1935470684
 Transform:
   m_ObjectHideFlags: 0
