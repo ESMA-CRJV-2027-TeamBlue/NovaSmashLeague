@@ -114,3 +114,6 @@ InitTestScene*.unity*
 # Unity samples
 Assets/Samples
 Assets/Samples.meta
+
+Builds/
+ProfilerCaptures/

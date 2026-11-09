@@ -1,9 +1,10 @@
+using Unity.Profiling;
 using UnityEngine;
 
 public class DynamicBody : PhysicsBody
 {
     [Header("Behaviour")]
-    [Tooltip("")]
+    [Tooltip("If true, the body bounces, else it slides")]
     public bool isBouncing = true;
     
     [Tooltip("The direction of this body")]
@@ -14,7 +15,9 @@ public class DynamicBody : PhysicsBody
     protected float halfExtent;
     protected Vector3 currentFramePosition;
     protected float remainingFrameDistance;
-
+    
+    static readonly ProfilerMarker _tickPerfMarker = new ProfilerMarker("CustomPhysics.Tick");
+    
     protected override void Awake()
     {
         base.Awake();
@@ -28,6 +31,7 @@ public class DynamicBody : PhysicsBody
     /// <param name="deltaTime">The time ellapsed since last physics frame</param>
     public override void PhysicsTick(float deltaTime)
     {
+        _tickPerfMarker.Begin();
         remainingFrameDistance = speed * deltaTime;
         while (remainingFrameDistance > 0f)
         {
@@ -50,6 +54,7 @@ public class DynamicBody : PhysicsBody
             }
         }
         transform.position = currentFramePosition;
+        _tickPerfMarker.End();
     }
 
     /// <summary>
