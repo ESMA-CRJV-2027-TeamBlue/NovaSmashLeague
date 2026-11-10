@@ -1,10 +1,19 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 [RequireComponent(typeof(SystemSound))]
 public class DEBUG_Sound : MonoBehaviour
 {
-    public AudioClip audioClip;
+    public AudioClip audioMusic;
+    public List<AudioClip> audioFX;
+    public List<AudioClip> audioAmbient;
+    public List<AudioClip> audioVoices;
     private SystemSound _systemSound;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,43 +25,40 @@ public class DEBUG_Sound : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            _systemSound.PlayTeamSound(Team.TeamA, audioClip, 0.25f);
+            _systemSound.PlayNewSound(SoundGroup.FXs,audioFX[Random.Range(0,audioFX.Count-1)], Random.Range(0.1f,1f), Random.Range(-1f, 1f));
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            _systemSound.PlayTeamSound(Team.TeamA,audioClip, 0.5f);
+            _systemSound.PlayNewSound(SoundGroup.Voices,audioVoices[Random.Range(0,audioVoices.Count-1)],Random.Range(0.1f,1f),Random.Range(-1f,1f));
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            _systemSound.PlayTeamSound(Team.TeamA,audioClip, 0.75f);
+            _systemSound.PlayNewSound(SoundGroup.Ambient,audioAmbient[Random.Range(0,audioAmbient.Count-1)]);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            _systemSound.PlayTeamSound(Team.TeamA,audioClip, 1f);
+            _systemSound.PlayNewSound(SoundGroup.Music,audioMusic);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            _systemSound.PlaySoundBoth(audioClip);
+            
         }
         if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            _systemSound.PlaySoundBoth(audioClip);
+            
         }
         if (Input.GetKeyDown(KeyCode.Alpha7))
         {
-            _systemSound.PlayTeamSound(Team.TeamB, audioClip, 1f);
+            
         }
         if (Input.GetKeyDown(KeyCode.Alpha8))
         {
-            _systemSound.PlayTeamSound(Team.TeamB, audioClip, 0.75f);
         }
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
-            _systemSound.PlayTeamSound(Team.TeamB, audioClip, 0.5f);
         }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            _systemSound.PlayTeamSound(Team.TeamB, audioClip, 0.25f);
         }
     }
 }
