@@ -18,7 +18,12 @@ public abstract class PhysicsBody : MonoBehaviour
 
     protected virtual void Start()
     {
+        // Do this in Start so the PhysicsSystem singleton is initialized during Awake 
         PhysicsSystem.Instance.AddBody(this);
+    }
+
+    protected virtual void OneEnable()
+    {
     }
 
     protected virtual void OnDisable()

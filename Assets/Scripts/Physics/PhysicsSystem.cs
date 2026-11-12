@@ -60,7 +60,7 @@ public class PhysicsSystem : MonoBehaviour
     /// <param name="vector3">The Vector3 to clean</param>
     /// <param name="threshold">The threshold used to cut the components values</param>
     /// <returns></returns>
-    public static Vector3 CleanVector3(Vector3 vector3, float threshold = 0.001f)
+    public static Vector3 CleanVector3(Vector3 vector3, float threshold = 0.01f)
     {
         if (Mathf.Abs(vector3.x) < threshold) vector3.x = 0f;
         if (Mathf.Abs(vector3.y) < threshold) vector3.y = 0f;

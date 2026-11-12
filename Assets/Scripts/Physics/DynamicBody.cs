@@ -1,3 +1,4 @@
+using System;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -83,5 +84,10 @@ public class DynamicBody : PhysicsBody
         remainingFrameDistance -= hit.distance;
         Vector3 project = PhysicsSystem.CleanVector3(Vector3.ProjectOnPlane(movementDirection, hit.normal)).normalized;
         movementDirection = project;
+    }
+
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(10f, 10f + 0 * 20f, 800f, 22f), ""+movementDirection);
     }
 }
