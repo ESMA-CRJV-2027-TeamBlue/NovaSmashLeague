@@ -7,6 +7,9 @@ public abstract class PhysicsBody : MonoBehaviour
 {
     protected Rigidbody rigidbody;
     protected Collider collider;
+    
+    // Hard limit to prevent too much loops while raycasting the trajectory
+    protected const int MAX_CAST_ITERATIONS = 100;
 
     #region Unity Messages
 
