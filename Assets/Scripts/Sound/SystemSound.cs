@@ -1,5 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.ShaderGraph.Legacy;
+using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(PoolManager))]
@@ -7,87 +15,96 @@ public class SystemSound : MonoBehaviour
 {
     [Header("PoolManagers : ")]
     [Tooltip("PoolManager handeling Ambient sound layer")]
-    public PoolManager _poolManagerAmbient;
+    public PoolManager poolManagerAmbient;
     [Tooltip("PoolManager handeling Ambient sound layer")]
-    public PoolManager _poolManagerFXs;
+    public PoolManager poolManagerFXs;
     [Tooltip("PoolManager handeling Ambient sound layer")]
-    public PoolManager _poolManagerVoices;
+    public PoolManager poolManagerVoices;
     private AudioSource _musicSource;
+    public static SystemSound Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if(Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     /// <summary>
     /// Reset the component needed in the gameObject.
     /// </summary>
     public virtual void Reset()
     {
-        PoolManager[] poolManagers = GetComponents<PoolManager>();
+        InitPoolManagers(SetListPoolManagers());
 
-        if (poolManagers.Length < 3)
+        InitMusicAudioSource();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private List<PoolManager> SetListPoolManagers()
+    {
+        List<PoolManager> poolManagers = GetComponents<PoolManager>().ToList<PoolManager>();
+
+        if (poolManagers.Count < 3)
         {
-            int difference = 3 - poolManagers.Length;
+            int difference = 3 - poolManagers.Count;
+            for (int i = 0; i < difference; i++)
+            {
+                PoolManager instance = gameObject.AddComponent<PoolManager>();
+                poolManagers.Add(instance);
+            }
+        }
+        else if (poolManagers.Count > 3)
+        {
+            int difference = poolManagers.Count - 3;
             for (int i = 0; i <= difference; i++)
             {
-                InitPoolManager();
+                PoolManager instance = poolManagers[poolManagers.Count - 1];
+                poolManagers.Remove(instance);
+                Destroy(instance);
             }
         }
-        else
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (i == 0)
-                {
-                    _poolManagerAmbient = poolManagers[i];
-                }
-                else if(i == 1)
-                {
-                    _poolManagerFXs = poolManagers[i];
-                }
-                else if( i == 2)
-                {
-                    _poolManagerVoices = poolManagers[i];
-                }
-            }
-        }
-
-        if (TryGetComponent<AudioSource>(out AudioSource audioSource))
-        {
-            _musicSource = audioSource;
-            _musicSource.playOnAwake = false;
-            _musicSource.loop = true;
-        }
-        else
-        {
-            _musicSource = gameObject.AddComponent<AudioSource>();
-            _musicSource.playOnAwake = false;
-            _musicSource.loop = true;
-        }
+        return poolManagers;
     }
 
     /// <summary>
     /// Initialize the 3 different PoolManager.
     /// </summary>
-    private void InitPoolManager()
+    private void InitPoolManagers(List<PoolManager> poolManagers)
     {
-        if (_poolManagerAmbient == null)
-        {
-            _poolManagerAmbient = gameObject.AddComponent<PoolManager>();
-            _poolManagerAmbient.poolSize = 5;
-        }
-        else if (_poolManagerFXs == null)
-        {
-            _poolManagerFXs = gameObject.AddComponent<PoolManager>();
-            _poolManagerFXs.poolSize = 10;
-        }
-        else if (_poolManagerVoices == null)
-        {
-            _poolManagerVoices = gameObject.AddComponent<PoolManager>();
-            _poolManagerVoices.poolSize = 4;
-        }
+        poolManagerAmbient = poolManagers[0];
+        poolManagerAmbient.poolSize = 5;
+        
+        poolManagerFXs = poolManagers[1];
+        poolManagerFXs.poolSize = 10;
+    
+        poolManagerVoices = poolManagers[2];
+        poolManagerVoices.poolSize = 4;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    /// <summary>
+    /// Initialise Music AudioSource
+    /// </summary>
+    private void InitMusicAudioSource()
     {
-        _musicSource = GetComponent<AudioSource>();
+        if (TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            _musicSource = audioSource;
+        }
+        else
+        {
+            _musicSource = gameObject.AddComponent<AudioSource>();
+        }
+        _musicSource.playOnAwake = false;
+        _musicSource.loop = true;
     }
 
     /// <summary>
@@ -97,36 +114,24 @@ public class SystemSound : MonoBehaviour
     /// <param name="audioClip">Audio Source to play</param>
     /// <param name="volume">Volume simulating the distance</param>
     /// <param name="stereoValue">Play Sound : (Left -> -1) (Middle -> 0) (Right -> 1)</param>
-    public void PlayNewSound(SoundGroup group,AudioClip audioClip, float volume, float stereoValue)
+    public void PlayNewSound(SoundGroup group,AudioClip audioClip, float volume = 1, float stereoValue = 0f)
     {
         switch(group)
         {
             case SoundGroup.FXs:
                 {
-                    PlayFXsSound(audioClip, volume, Mathf.Clamp01(stereoValue));
+                    PlaySound(audioClip, poolManagerFXs, volume, Mathf.Clamp01(stereoValue));
                     break;
                 }
 
             case SoundGroup.Voices:
                 {
-                    PlayVoices(audioClip, volume, Mathf.Clamp01(stereoValue));
+                    PlaySound(audioClip, poolManagerVoices,volume, Mathf.Clamp01(stereoValue));
                     break;
                 }
-        }
-    }
-
-    /// <summary>
-    /// Global Function to Play a new sound.
-    /// </summary>
-    /// <param name="group">Layer Sound Enum (AudioMixerGroup)</param>
-    /// <param name="audioClip">Audio Source to play</param>
-    public void PlayNewSound(SoundGroup group, AudioClip audioClip)
-    {
-        switch (group)
-        {
             case SoundGroup.Ambient:
                 {
-                    PlayAmbientSound(audioClip);
+                    PlaySound(audioClip, poolManagerAmbient);
                     break;
                 }
 
@@ -137,55 +142,28 @@ public class SystemSound : MonoBehaviour
                 }
         }
     }
+
     /// <summary>
-    /// Play an Ambient sound using the poolManagerAmbient and the Ambient MixerGroup.
+    /// Convert distance to Volume (float [0,1]).
     /// </summary>
-    /// <param name="audioClip">Audio Source to play</param>
-    private void PlayAmbientSound(AudioClip audioClip)
+    /// <param name="distance">Distance between closest listener and sender.</param>
+    /// <param name="maxDistanceInArena">Distance max reachable in the arena.</param>
+    /// <returns>Float value between [0.1f, 1f]</returns>
+    private static float DistanceToVolume(float distance, float maxDistanceInArena)
     {
-        GameObject instance = _poolManagerAmbient.PoolInstance();
-        instance.transform.SetParent(transform);
-        AudioSource audioSource = instance.GetComponent<AudioSource>();
-        audioSource.resource = audioClip;
-        audioSource.PlayOneShot(audioClip);
-        StartCoroutine(LifeTimeSound(instance, audioClip.length));
+        return Mathf.Lerp(0.1f, 1f, (100f*distance/maxDistanceInArena)/100f);
     }
+
     /// <summary>
-    /// Play Music sound using the Music MixerGroup.
+    /// Play a sound using the PoolManager of the MixerGroup.
     /// </summary>
     /// <param name="audioClip">Audio Source to play</param>
-    private void PlayMusic(AudioClip audioClip)
-    {
-        _musicSource.resource = audioClip;
-        _musicSource.Play();
-        
-    }
-    /// <summary>
-    /// Play Voice lane sound using the poolManagerVoices and the Voices MixerGroup.
-    /// </summary>
-    /// <param name="audioClip">Audio Source to play</param>
+    /// <param name="poolManager">PoolManager's MixerGroup.</param>
     /// <param name="volume">Volume simulating the distance</param>
     /// <param name="stereoValue">Play Sound : (Left -> -1) (Middle -> 0) (Right -> 1)</param>
-    private void PlayVoices(AudioClip audioClip, float volume, float stereoValue)
+    private void PlaySound(AudioClip audioClip, PoolManager poolManager, float volume = 1, float stereoValue = 0f)
     {
-        GameObject instance = _poolManagerVoices.PoolInstance();
-        instance.transform.SetParent(transform);
-        AudioSource audioSource = instance.GetComponent<AudioSource>();
-        audioSource.resource = audioClip;
-        audioSource.panStereo = stereoValue;
-        audioSource.volume = volume;
-        audioSource.PlayOneShot(audioClip);
-        StartCoroutine(LifeTimeSound(instance, audioClip.length));
-    }
-    /// <summary>
-    /// Play FX sound using the poolManagerFXs and the Effects MixerGroup.
-    /// </summary>
-    /// <param name="audioClip">Audio Source to play</param>
-    /// <param name="volume">Volume simulating the distance</param>
-    /// <param name="stereoValue">Play Sound : (Left -> -1) (Middle -> 0) (Right -> 1)</param>
-    private void PlayFXsSound(AudioClip audioClip, float volume, float stereoValue)
-    {
-        GameObject instance = _poolManagerFXs.PoolInstance();
+        GameObject instance = poolManager.PoolInstance();
         instance.transform.SetParent(transform);
         AudioSource audioSource = instance.GetComponent<AudioSource>();
         audioSource.resource = audioClip;
@@ -196,11 +174,21 @@ public class SystemSound : MonoBehaviour
     }
 
     /// <summary>
+    /// Play Music sound using the Music MixerGroup.
+    /// </summary>
+    /// <param name="audioClip">Audio Source to play</param>
+    private void PlayMusic(AudioClip audioClip)
+    {
+        _musicSource.resource = audioClip;
+        _musicSource.Play();
+    }
+
+    /// <summary>
     /// Waiting for the sound to end before unable the audio source instance.
     /// </summary>
     /// <param name="instance">audio source instance</param>
     /// <param name="duration">sound duration / length</param>
-    /// <returns></returns>
+    /// <returns>Null</returns>
     private IEnumerator LifeTimeSound(GameObject instance, float duration)
     {
         yield return new WaitForSeconds(duration);
