@@ -22,8 +22,14 @@ public class PhysicsSystem : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        Physics.simulationMode = SimulationMode.Script;
+    }
+
     private void FixedUpdate()
     {
+        Physics.Simulate(Time.fixedDeltaTime);
         // Send physics frame data to all bodies so they can move accordingly
         foreach (PhysicsBody body in _bodies)
         {

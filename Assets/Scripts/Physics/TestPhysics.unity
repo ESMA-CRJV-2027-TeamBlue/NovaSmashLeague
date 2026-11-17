@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &14124550
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -351,6 +352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &200054802
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -647,12 +649,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7970c5c3aef013548a82707b785773b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBody
+  disablePhysics: 0
+  localGroundDirection: {x: 0, y: 0}
   shouldJump: 0
   shouldExtraJump: 0
   shouldFloat: 0
   movementMetrics: {fileID: 11400000, guid: cf608761704267942bee10238cf1764d, type: 2}
   _skinWidth: 0.01
   _groundCheckLength: 0.1
+  OnJumped:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExtraJumped:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &372587067
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -694,6 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HumanPlayerInput
   isGamepad: 1
   gamepadIndex: 0
+  bufferTime: 0.1
 --- !u!114 &372587069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,6 +952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89886d945a1440e4ca26170a2f93cce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DynamicBody
+  disablePhysics: 0
   isBouncing: 1
   movementDirection: {x: 0, y: 0, z: 0}
   speed: 5
@@ -1099,6 +1111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &793859806
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1252,6 +1265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &843111287
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1405,6 +1419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &979637297
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1558,6 +1573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &1020285799
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1711,6 +1727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &1176398863
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1864,6 +1881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &1277297369
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2107,6 +2125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &1619208687
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2220,13 +2239,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1619208685}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2391172, y: 0.09904541, z: -0.12607838, w: 0.9576624}
+  m_LocalRotation: {x: 0.23458819, y: 0.6551549, z: 0.026494958, w: 0.7176618}
   m_LocalPosition: {x: -19.19, y: 3.44, z: 0.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 28.879, y: 8.499, z: -12.808}
+  m_LocalEulerAnglesHint: {x: 17.577, y: 88.108, z: 21.243}
 --- !u!1 &1657714028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2260,6 +2279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &1657714030
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2640,6 +2660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &1752863042
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2793,6 +2814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &1774533103
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2946,6 +2968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8577e9a4b3fe44d870c90d15c7a3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticBody
+  disablePhysics: 0
 --- !u!54 &1974704394
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3099,6 +3122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89886d945a1440e4ca26170a2f93cce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DynamicBody
+  disablePhysics: 0
   isBouncing: 0
   movementDirection: {x: 0, y: 0, z: 0}
   speed: 3

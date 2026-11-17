@@ -8,6 +8,9 @@ public abstract class PhysicsBody : MonoBehaviour
     protected Rigidbody rigidbody;
     protected Collider collider;
     
+    [Tooltip("Use in case we don't want to simulate this body without disabling it")]
+    public bool disablePhysics = false;
+    
     // Hard limit to prevent too much loops while raycasting the trajectory
     protected const int MAX_CAST_ITERATIONS = 100;
 
@@ -23,10 +26,6 @@ public abstract class PhysicsBody : MonoBehaviour
     {
         // Do this in Start so the PhysicsSystem singleton is initialized during Awake 
         PhysicsSystem.Instance.AddBody(this);
-    }
-
-    protected virtual void OneEnable()
-    {
     }
 
     protected virtual void OnDisable()
