@@ -58,8 +58,7 @@ public class PlayerBody : PhysicsBody
         
         // Init data for this frame
         _currentFramePosition = rigidbody.position;
-        RaycastHit groundHit;
-        _onGround = Physics.Raycast(_capsulePoint1 + Vector3.down * _extentX, Vector3.down, out groundHit, _groundCheckLength);
+        _onGround = Physics.CapsuleCast(_capsulePoint1, _capsulePoint2, _extentX, Vector3.down, out var groundHit, _groundCheckLength);
         _currentFrameMovementRemaining = Vector3.zero;
         
         #region Compute new horizontal velocity
@@ -104,6 +103,7 @@ public class PlayerBody : PhysicsBody
             {
                 _currentVerticalSpeed = movementMetrics.jumpForce;
                 OnJumped.Invoke();
+                shouldJump = false;
             }
         }
         else // In air
@@ -114,7 +114,7 @@ public class PlayerBody : PhysicsBody
             {
                 _currentVerticalSpeed = movementMetrics.jumpForce;
                 _extraJumpsRemaining--;
-                OnJumped.Invoke();
+                OnExtraJumped.Invoke();
             }
             // Floating
             else if (shouldFloat)
@@ -161,7 +161,7 @@ public class PlayerBody : PhysicsBody
         }
         
         // Not really working
-        Depenetrate();
+        // Depenetrate();
         
         rigidbody.position = _currentFramePosition;
 
@@ -194,11 +194,9 @@ public class PlayerBody : PhysicsBody
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(_capsulePoint1, _extentX);
         Gizmos.DrawWireSphere(_capsulePoint2, _extentX);
+        Gizmos.color = Color.red;
         Gizmos.DrawRay(_currentFramePosition, _currentGroundVelocity.normalized);
         Gizmos.DrawRay(_currentFramePosition + Vector3.down * _extentY, Vector3.down * _groundCheckLength);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(_currentFramePosition, _currentGroundVelocity);  
     }
 
     private void OnGUI()

@@ -12,6 +12,15 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
+    path: Assets/Scenes/StartupScene.unity
+    guid: 26c0b0bb667339e46bd42b39c63ae03c
+  - enabled: 1
+    path: Assets/Scenes/Whiterooms/Whiteroom_001.unity
+    guid: 84e687df338c5a149824b15da3b71659
+  - enabled: 1
+    path: Assets/Scenes/Whiterooms/Whiteroom_002.unity
+    guid: 2ae43fd10fa482b4e93249c3ab7b7f78
+  - enabled: 1
     path: Assets/Scripts/Physics/TestPhysics.unity
     guid: 6df7585bbe1f3734aaf3dbb75152eb2f
   m_configObjects:

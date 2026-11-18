@@ -123,7 +123,8 @@ public class HumanPlayerInput : MonoBehaviour
         
         // Multiple Updates can happen between two FixedUpdate, thus resetting the value by error
         _playerInput.pressedJump = true;
-        yield return new WaitForSeconds(bufferTime);
+        yield return new WaitForFixedUpdate();
+        // yield return new WaitForSeconds(bufferTime);
         _playerInput.pressedJump = false;
         _pressedJumpBufferingCoroutine = null;
     }
