@@ -1003,6 +1003,10 @@ MonoBehaviour:
   _dampingFollow: 0.5
   _maxHightCamera: 5
   _minHightCamera: 3
+  _maxPositionYInArena: 20
+  _minPositionYInArena: 0
+  _maxRotationX: 40
+  _minRotationX: 10
   _ballSpeedDebug: 1
 --- !u!1 &1155037928
 GameObject:
