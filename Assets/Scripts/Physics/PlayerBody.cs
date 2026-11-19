@@ -10,7 +10,6 @@ public class PlayerBody : PhysicsBody
     private Vector3 _currentFramePosition;
     private Vector3 _currentFrameMovementRemaining;
     // Array to avoid creating new objects every frame
-    private RaycastHit[] _capsuleHits = new RaycastHit[10];
     private Collider[] _overlapCapsuleHits = new Collider[10];
     // How many objects we collided with last cast
     private int _nbCaspuleHits;
@@ -34,7 +33,7 @@ public class PlayerBody : PhysicsBody
     private float _extentY;
    
     [Tooltip("The metrics used for tweaking the movements")]
-    public PlayerMovementMetricsSO movementMetrics;
+    public SO_PlayerMovementMetrics movementMetrics;
     [Tooltip("Extra space used for raycasts to prevent interpenetrating a wall")]
     [SerializeField] private float _skinWidth = 0.01f;
     [Tooltip("Length of the raycast to know we are touching ground")]
@@ -103,12 +102,12 @@ public class PlayerBody : PhysicsBody
             {
                 _currentVerticalSpeed = movementMetrics.jumpForce;
                 OnJumped.Invoke();
-                shouldJump = false;
             }
         }
         else // In air
         {
             float targetVerticalSpeed = movementMetrics.maxFallSpeed;
+            float verticalAcceleration = movementMetrics.gravityForce;
             // Extra jump
             if (shouldExtraJump && _extraJumpsRemaining > 0)
             {
@@ -121,7 +120,11 @@ public class PlayerBody : PhysicsBody
             {
                 targetVerticalSpeed = movementMetrics.maxFallSpeed * movementMetrics.floatFactor;
             }
-            _currentVerticalSpeed = Mathf.Max(targetVerticalSpeed, _currentVerticalSpeed + movementMetrics.gravityForce *  deltaTime);
+            else if (_currentVerticalSpeed < 0)
+            {
+                verticalAcceleration *= movementMetrics.fallMultiplier;
+            }
+            _currentVerticalSpeed = Mathf.Max(targetVerticalSpeed, _currentVerticalSpeed + verticalAcceleration *  deltaTime);
         }
         _currentFrameMovementRemaining += Vector3.up * (_currentVerticalSpeed * deltaTime);
         #endregion
@@ -169,6 +172,11 @@ public class PlayerBody : PhysicsBody
         
     }
 
+    /// <summary>
+    /// NOT WORKING AT THE MOMENT
+    /// Should help to prevent penetrating static surfaces (walls, ground, ceiling)
+    /// Problem is it makes a big movement that throw the player away instead of just moving outside the mesh bounds
+    /// </summary>
     private void Depenetrate()
     {
         int hitCount = Physics.OverlapCapsuleNonAlloc(_capsulePoint1, _capsulePoint2, _extentX, _overlapCapsuleHits);

@@ -18,7 +18,10 @@ MonoBehaviour:
   uTurnAngle: 30
   uTurnFriction: 60
   jumpForce: 20
-  gravityForce: -60
-  maxFallSpeed: -20
+  gravityForce: -30
+  maxFallSpeed: -30
+  fallMultiplier: 3
   floatFactor: 0.3
   extraJumps: 1
+  jumpHeight: 4.5
+  jumpApexTime: 0.5
