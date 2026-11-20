@@ -934,13 +934,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1136266448}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08715578, y: 0, z: 0, w: 0.9961947}
+  m_LocalRotation: {x: -0.039085392, y: 0, z: 0, w: 0.99923587}
   m_LocalPosition: {x: 1.06, y: 3.03, z: -6.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1753623037}
-  m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -4.48, y: 0, z: 0}
 --- !u!114 &1136266452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -997,7 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e7a5e91fd894cc4abf8704ce970b06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
-  _ball: {fileID: 1240000006}
+  _ball: {fileID: 1240000000}
   _player: {fileID: 1620015534}
   _pivot: {fileID: 1753623037}
   _dampingFollow: 0.5
@@ -1007,6 +1007,11 @@ MonoBehaviour:
   _minPositionYInArena: 0
   _maxRotationX: 40
   _minRotationX: 10
+  _speedTransitionShould: 0.5
+  _minRotationXShould: -45
+  _minPositionYShould: -3
+  _minBallPositionToScreenInPercentShould: 0.9
+  _maxBallPositionToScreenInPercentShould: 0.95
   _ballSpeedDebug: 1
 --- !u!1 &1155037928
 GameObject:
@@ -1943,7 +1948,7 @@ Transform:
   m_GameObject: {fileID: 1620015530}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 9.25, z: 0}
+  m_LocalPosition: {x: 0, y: 1.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
