@@ -1008,10 +1008,10 @@ MonoBehaviour:
   _minPositionYInArena: 0
   _maxCameraRotationX: 45
   _minCameraRotationX: 10
-  _minCameraRotationXShould: -45
-  _minCameraPositionYShould: -3
-  _limitBallPositionToScreenInPercentShould: 0.8
-  _dampingShouldFollow: 0.001
+  _minCameraRotationXApexFollow: -45
+  _minCameraPositionYApexFollow: -3
+  _BallPositionToViewportApexFollow: 0.8
+  _dampingApexFollow: 0.001
   _ballSpeedDebug: 1
 --- !u!1 &1155037928
 GameObject:
