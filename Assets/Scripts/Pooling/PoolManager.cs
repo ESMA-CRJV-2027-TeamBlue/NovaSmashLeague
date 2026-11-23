@@ -10,6 +10,16 @@ public class PoolManager : MonoBehaviour
     
     private List<GameObject> _pool = new List<GameObject>();
 
+    private void Start()
+    {
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject newInstance = Instantiate(pooledPrefab);
+            _pool.Add(newInstance);
+            newInstance.SetActive(false);
+        }
+    }
+
     /// <summary>
     /// Creates or activate an instance of the prefab to pool.
     /// If the pool is full of active instances, get a random instance.
@@ -28,15 +38,6 @@ public class PoolManager : MonoBehaviour
             }
         }
         
-        // If we cannot create more, get a random instance
-        if (_pool.Count == poolSize)
-        {
-            return _pool[Random.Range(0, _pool.Count)];
-        }
-
-        // Add a new instance to the pool
-        GameObject newInstance = Instantiate(pooledPrefab);
-        _pool.Add(newInstance);
-        return newInstance;
+        return _pool[Random.Range(0, _pool.Count)];
     }
 }
