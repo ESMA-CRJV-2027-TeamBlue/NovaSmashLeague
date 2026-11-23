@@ -3,6 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(CollisionBody))]
 public abstract class PhysicsBody : MonoBehaviour
 {
     protected Rigidbody rigidbody;

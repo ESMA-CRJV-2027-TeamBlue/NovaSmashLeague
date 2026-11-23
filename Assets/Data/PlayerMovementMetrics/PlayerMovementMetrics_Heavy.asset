@@ -15,7 +15,7 @@ MonoBehaviour:
   groundAcceleration: 40
   groundFriction: 60
   maxgroundSpeed: 30
-  uTurnAngle: 120
+  uTurnAngle: 60
   uTurnFriction: 30
   jumpForce: 20
   gravityForce: -55
