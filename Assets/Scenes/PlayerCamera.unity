@@ -1000,18 +1000,18 @@ MonoBehaviour:
   _ball: {fileID: 1240000000}
   _player: {fileID: 1620015534}
   _pivot: {fileID: 1753623037}
-  _dampingFollow: 0.5
-  _maxHightCamera: 5
-  _minHightCamera: 3
+  _dampingRotationFollow: 0.5
+  _maxCameraHight: 5
+  _minCameraHight: 3
+  _dampingOffsetFollow: 0.001
   _maxPositionYInArena: 20
   _minPositionYInArena: 0
-  _maxRotationX: 40
-  _minRotationX: 10
-  _speedTransitionShould: 0.5
-  _minRotationXShould: -45
-  _minPositionYShould: -3
-  _minBallPositionToScreenInPercentShould: 0.9
-  _maxBallPositionToScreenInPercentShould: 0.95
+  _maxCameraRotationX: 45
+  _minCameraRotationX: 10
+  _minCameraRotationXShould: -45
+  _minCameraPositionYShould: -3
+  _limitBallPositionToScreenInPercentShould: 0.8
+  _dampingShouldFollow: 0.001
   _ballSpeedDebug: 1
 --- !u!1 &1155037928
 GameObject:
