@@ -13,46 +13,12 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform _pivot;
     #endregion
 
-    #region Global Parameters
-    [Header("Global Parameters :")]
-    [Tooltip("Damping force of the camera follow In Y rotation.")]
-    [SerializeField] private float _dampingRotationFollow;
+    #region Parameters
+    [Tooltip("ScriptableObject CameraParameters.")]
+    [SerializeField] private SO_CameraParameters _cameraParameters;
     #endregion
 
-    #region Offset Y
-    [Header("Offset Position on Y, parameters :")]
-    [Tooltip("Maximum hight on offset position on Y axis of the camera.")]
-    [SerializeField] private float _maxCameraHight;
-    [Tooltip("Minimum hight on offset position on Y axis of the camera.")]
-    [SerializeField] private float _minCameraHight;
-    [Tooltip("Damping force of the camera Offset Follow In Y position.")]
-    [SerializeField] private float _dampingOffsetFollow;
-    #endregion
-
-    #region RotationX
-    [Header("Camera Rotation on X Parameters :")]
-    [Tooltip("Maximum Hight (position Y) reachable in the arena.")]
-    [SerializeField] private float _maxPositionYInArena;
-    [Tooltip("Minimum Hight (position Y) reachable in the arena.")]
-    [SerializeField] private float _minPositionYInArena;
-    [Tooltip("Maximum angle value of the camera rotation on X.")]
-    [SerializeField] private float _maxCameraRotationX;
-    [Tooltip("Minimu angle value of the camera rotaiton on X.")]
-    [SerializeField] private float _minCameraRotationX;
-    #endregion
-
-    #region Should
-    [Header("Apex Follow Parameters :")]
-    [Tooltip("Minimal X Rotation of the camera on the Apex Follow.")]
-    [SerializeField] private float _minCameraRotationXApexFollow;
-    [Tooltip("Minimal Y position of the camera on the Apex Follow.")]
-    [SerializeField] private float _minCameraPositionYApexFollow;
-    [Tooltip("Limit of the ball position on viewport to orient the Apex follow. (in percent)")]
-    [SerializeField] private float _BallPositionToViewportApexFollow;
-    [Tooltip("Damping force of the camera follow in Apex Follow.")]
-    [SerializeField] private float _dampingApexFollow;
     private bool _switch = false;
-    #endregion
 
     #region DEBUG
     [Header("DEBUG Parameters :")]
@@ -89,7 +55,7 @@ public class CameraFollow : MonoBehaviour
     {
         Vector3 direction = _ball.transform.position - _pivot.position;
         Quaternion TargetRotation = Quaternion.LookRotation(direction);
-        Quaternion rotation = Quaternion.Lerp(_pivot.rotation, TargetRotation, Mathf.Lerp(_dampingRotationFollow, _dampingRotationFollow * 10, 1 - _ballSpeedDebug / 10f) * Time.deltaTime);
+        Quaternion rotation = Quaternion.Lerp(_pivot.rotation, TargetRotation, Mathf.Lerp(_cameraParameters._dampingRotationFollow, _cameraParameters._dampingRotationFollow * 10, 1 - _ballSpeedDebug / 10f) * Time.deltaTime);
         _pivot.eulerAngles = new Vector3(0f, rotation.eulerAngles.y, 0f);
     }
 
@@ -103,10 +69,10 @@ public class CameraFollow : MonoBehaviour
 
         if (ecartHightBallPlyaer < -2f || ecartHightBallPlyaer > 2f)
         {
-            if ((ballScreenPosition.y > 0.8f && transform.localPosition.y < _maxCameraHight) || (ballScreenPosition.y < 0.8f && transform.localPosition.y > _minCameraHight) )
+            if ((ballScreenPosition.y > 0.8f && transform.localPosition.y < _cameraParameters._maxCameraHeight) || (ballScreenPosition.y < 0.8f && transform.localPosition.y > _cameraParameters._minCameraHeight) )
             {
-                float newHight = transform.localPosition.y + (_ballRb.linearVelocity.y * Mathf.Lerp(_dampingOffsetFollow, _dampingOffsetFollow * 10, 1 - _ballSpeedDebug / 10f));
-                transform.localPosition = new Vector3(transform.localPosition.x,Mathf.Clamp(newHight,_minCameraHight,_maxCameraHight) , transform.localPosition.z);
+                float newHight = transform.localPosition.y + (_ballRb.linearVelocity.y * Mathf.Lerp(_cameraParameters._dampingOffsetFollow, _cameraParameters._dampingOffsetFollow * 10, 1 - _ballSpeedDebug / 10f));
+                transform.localPosition = new Vector3(transform.localPosition.x,Mathf.Clamp(newHight, _cameraParameters._minCameraHeight, _cameraParameters._maxCameraHeight) , transform.localPosition.z);
             }
         }
     }
@@ -125,8 +91,8 @@ public class CameraFollow : MonoBehaviour
     /// <returns>Camera rotation X value (float).</returns>
     private float CameraAngleXValue()
     {
-        float percent = _player.position.y / (_maxPositionYInArena - _minPositionYInArena);
-        float rotationX = Mathf.Lerp(_minCameraRotationX, _maxCameraRotationX, percent);
+        float percent = _player.position.y / (_cameraParameters._maxPositionYInArena - _cameraParameters._minPositionYInArena);
+        float rotationX = Mathf.Lerp(_cameraParameters._minCameraRotationX, _cameraParameters._maxCameraRotationX, percent);
         return rotationX;
     }
 
@@ -137,11 +103,11 @@ public class CameraFollow : MonoBehaviour
     private bool ApexFollowCondition()
     {
         Vector3 ballScreenPosition = Camera.main.WorldToViewportPoint(_ball.transform.position);
-        if (!_switch && transform.localPosition.y >= _maxCameraHight && ballScreenPosition.y >= 0.9f)
+        if (!_switch && transform.localPosition.y >= _cameraParameters._maxCameraHeight && ballScreenPosition.y >= 0.9f)
         {
             _switch = true;
         }
-        else if(_switch && transform.localPosition.y >= _maxCameraHight && ballScreenPosition.y <= 0.9f)
+        else if(_switch && transform.localPosition.y >= _cameraParameters._maxCameraHeight && ballScreenPosition.y <= 0.9f)
         {
             _switch = false;
         }
@@ -155,13 +121,13 @@ public class CameraFollow : MonoBehaviour
     {
         Vector3 ballScreenPosition = Camera.main.WorldToViewportPoint(_ball.transform.position);
 
-        if ( (ballScreenPosition.y > _BallPositionToViewportApexFollow && transform.localPosition.y > _minCameraPositionYApexFollow) || (ballScreenPosition.y < _BallPositionToViewportApexFollow && transform.localPosition.y < _maxCameraHight) )
+        if ( (ballScreenPosition.y > _cameraParameters._BallPositionToViewportApexFollow && transform.localPosition.y > _cameraParameters._minCameraPositionYApexFollow) || (ballScreenPosition.y < _cameraParameters._BallPositionToViewportApexFollow && transform.localPosition.y < _cameraParameters._maxCameraHeight) )
         {
-            float positionY = transform.localPosition.y - (_ballRb.linearVelocity.y * Mathf.Lerp(_dampingApexFollow, _dampingApexFollow * 10, 1 - _ballSpeedDebug / 10f));
-            transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(positionY, _minCameraPositionYApexFollow, _maxCameraHight), transform.localPosition.z);
+            float positionY = transform.localPosition.y - (_ballRb.linearVelocity.y * Mathf.Lerp(_cameraParameters._dampingApexFollow, _cameraParameters._dampingApexFollow * 10, 1 - _ballSpeedDebug / 10f));
+            transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(positionY, _cameraParameters._minCameraPositionYApexFollow, _cameraParameters._maxCameraHeight), transform.localPosition.z);
 
-            float rotationX = Mathf.Lerp(_minCameraRotationXApexFollow, CameraAngleXValue(), Mathf.InverseLerp(_minCameraPositionYApexFollow, _maxCameraHight, transform.localPosition.y));
-            transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _minCameraRotationXApexFollow, CameraAngleXValue()), transform.localEulerAngles.y, transform.localEulerAngles.z);
+            float rotationX = Mathf.Lerp(_cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue(), Mathf.InverseLerp(_cameraParameters._minCameraPositionYApexFollow, _cameraParameters._maxCameraHeight, transform.localPosition.y));
+            transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), transform.localEulerAngles.y, transform.localEulerAngles.z);
         }
     }
 

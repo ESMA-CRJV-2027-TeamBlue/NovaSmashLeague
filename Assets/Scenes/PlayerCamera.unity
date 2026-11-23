@@ -1000,18 +1000,7 @@ MonoBehaviour:
   _ball: {fileID: 1240000000}
   _player: {fileID: 1620015534}
   _pivot: {fileID: 1753623037}
-  _dampingRotationFollow: 0.5
-  _maxCameraHight: 5
-  _minCameraHight: 3
-  _dampingOffsetFollow: 0.001
-  _maxPositionYInArena: 20
-  _minPositionYInArena: 0
-  _maxCameraRotationX: 45
-  _minCameraRotationX: 10
-  _minCameraRotationXApexFollow: -45
-  _minCameraPositionYApexFollow: -3
-  _BallPositionToViewportApexFollow: 0.8
-  _dampingApexFollow: 0.001
+  _cameraParameters: {fileID: 11400000, guid: 96c5929d493e1ba4683fae53f5eeed17, type: 2}
   _ballSpeedDebug: 1
 --- !u!1 &1155037928
 GameObject:
