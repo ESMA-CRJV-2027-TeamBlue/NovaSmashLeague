@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SO_CameraParam1
   m_EditorClassIdentifier: Assembly-CSharp::SO_CameraParameters
   _dampingRotationFollow: 0.5
-  _maxCameraHight: 5
-  _minCameraHight: 3
+  _maxCameraHeight: 5
+  _minCameraHeight: 3
   _dampingOffsetFollow: 0.001
   _maxPositionYInArena: 20
   _minPositionYInArena: 0
