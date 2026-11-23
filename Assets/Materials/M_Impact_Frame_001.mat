@@ -115,11 +115,11 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Intensity: 1
-    - _Invert: 0
-    - _LineCount: 666
-    - _LineInner: 0.483
+    - _Invert: 1
+    - _LineCount: 937
+    - _LineInner: 0.454
     - _LineOpacity: 1
-    - _LineThreshold: 0.587
+    - _LineThreshold: 0.578
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -133,7 +133,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _Threshold: 0.5
+    - _Threshold: 0.536
     - _Treshold: 0.5
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
@@ -142,7 +142,8 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ImpactColor: {r: 1, g: 0, b: 0, a: 1}
+    - _ImpactColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ImpactDarkColor: {r: 0, g: 0, b: 0, a: 1}
     - _LineColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
