@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AOC_PostMatch_Lizard
+  m_Controller: {fileID: 9100000, guid: 089924a19535ba348b055897e7812754, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 1f89f9da135bea64ea5fc6e503b24183, type: 2}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 361f131067c623e47bb28bdf2aac9715, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: a94a99c70c4707948bd39241f4757ba3, type: 2}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: ec1f2e452f620994f9d2ae8b83fba5b1, type: 3}
