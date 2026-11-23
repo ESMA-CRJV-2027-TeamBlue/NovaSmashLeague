@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 59c551aef2fa16149b095145545df52e
+guid: bd245b8a3a01a20428aa35e6238051df
 ModelImporter:
   serializedVersion: 24600
   internalIDToNameTable: []
@@ -7,8 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: M_Ball_Trail_001
-    second: {fileID: 2100000, guid: 3b97d12714072d64d8147ddf0974be3f, type: 2}
+      name: M_Trail_001
+    second: {fileID: 2100000, guid: 2c27cccf74ef2f44c980ebf4b81a6523, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: openPBR_shader1
+    second: {fileID: 2100000, guid: 2c27cccf74ef2f44c980ebf4b81a6523, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
