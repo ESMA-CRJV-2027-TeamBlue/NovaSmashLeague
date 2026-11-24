@@ -9,6 +9,9 @@ public class TestTrackingScreen : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 _dampVelocity;
 
+    [Range(0f, 1f)]
+    public float rotateSpeed;
+
 
     public bool useDamp = false;
     public float smoothTime = 1f;
@@ -21,7 +24,7 @@ public class TestTrackingScreen : MonoBehaviour
 
     private void Update()
     {
-        screenPosition = trackingCamera.WorldToViewportPoint(trackedObject.transform.position);
+       screenPosition = trackingCamera.WorldToViewportPoint(trackedObject.transform.position);
         var p1 = screenPosition.y;
         var p2 = 0.8f;
         var p3 = 0.2f;
@@ -45,16 +48,15 @@ public class TestTrackingScreen : MonoBehaviour
             float delta = Y - ((p3-offsetP) * Y) / (p1-offsetP);
             targetPosition = trackingCamera.transform.position + Vector3.up * delta;
         }
-
-        if (useDamp)
-        {
-            trackingCamera.transform.position = Vector3.SmoothDamp(trackingCamera.transform.position, targetPosition,
-                ref _dampVelocity, smoothTime, maxSpeed);
-        }
-        else
-        {
-            trackingCamera.transform.position = targetPosition;
-        }
+        
+        trackingCamera.transform.position = targetPosition;
+        
+        Vector3 relativePos = trackedObject.transform.position - trackingCamera.transform.position;
+        relativePos.y = 0;
+        Quaternion rotation = Quaternion.LookRotation(relativePos);
+        rotation = Quaternion.Lerp(trackingCamera.transform.rotation, rotation, Mathf.Lerp(0.5f, 5f, rotateSpeed) * Time.deltaTime);
+        // pivotCamera.rotation = rotation;
+        trackingCamera.transform.eulerAngles= new Vector3(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
     }
 
     private void OnGUI()

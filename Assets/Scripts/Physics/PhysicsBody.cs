@@ -44,6 +44,7 @@ public abstract class PhysicsBody : MonoBehaviour
         }
         rb.useGravity = false;
         rb.isKinematic = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
     

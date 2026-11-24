@@ -23,8 +23,7 @@ public class BallController : MonoBehaviour
                 ballBody.Bounce(hit);
                 break;
             case BodyType.Player:
-                ballBody.Snap(hit);
-                ballBody.speed = 0f;
+                ballBody.PassThrough(hit);
                 break;
         }
     }

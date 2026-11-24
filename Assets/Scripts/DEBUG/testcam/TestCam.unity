@@ -271,9 +271,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TestTrackingScreen
   trackedObject: {fileID: 2046300115}
   trackingCamera: {fileID: 105308372}
+  rotateSpeed: 0
   useDamp: 0
-  smoothTime: 1
-  maxSpeed: 10
+  smoothTime: 0.1
+  maxSpeed: 50
 --- !u!1 &517089758
 GameObject:
   m_ObjectHideFlags: 0

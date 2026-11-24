@@ -29,6 +29,7 @@ public class BallBody : PhysicsBody
     private float halfExtent;
     private Vector3 currentFramePosition;
     private float remainingFrameDistance;
+    private List<CollisionBody> _collisionBodiesToIgnoreThisFrame = new List<CollisionBody>();
 
     [Header("Events / feedbacks")]
     [Tooltip("Emitted when the ball collides with something. Gives the CollisionBody we collided with, and the RaycastHit of the collision.")]
@@ -65,23 +66,31 @@ public class BallBody : PhysicsBody
     {
         remainingFrameDistance = speed * deltaTime;
         int currentIteration = 0;
+        _collisionBodiesToIgnoreThisFrame.Clear();
         while (remainingFrameDistance > 0f && currentIteration++ < MAX_CAST_ITERATIONS)
         {
-            Vector3 nextMovement = movementDirection.normalized * remainingFrameDistance;
-            if(Physics.SphereCast(currentFramePosition, halfExtent, movementDirection.normalized, out RaycastHit hit, remainingFrameDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
-            {
-                if(hit.collider.TryGetComponent(out CollisionBody body))
-                {
-                    OnBodyCollision?.Invoke(body, hit);
-                }
-            }
-            else
-            {
-                currentFramePosition += nextMovement;
-                remainingFrameDistance = 0f;
-            }
+            CheckCollisionAhead();
         }
         transform.position = currentFramePosition;
+    }
+
+    public void CheckCollisionAhead()
+    {
+        Vector3 nextMovement = movementDirection.normalized * remainingFrameDistance;
+        if(
+            Physics.SphereCast(currentFramePosition, halfExtent, movementDirection.normalized, out RaycastHit hit, remainingFrameDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
+            && hit.collider.TryGetComponent(out CollisionBody body)
+            && !_collisionBodiesToIgnoreThisFrame.Contains(body)
+        )
+        {
+            OnBodyCollision?.Invoke(body, hit);
+            _collisionBodiesToIgnoreThisFrame.Add(body);
+        }
+        else
+        {
+            currentFramePosition += nextMovement;
+            remainingFrameDistance = 0f;
+        }
     }
 
     /// <summary>
@@ -104,11 +113,22 @@ public class BallBody : PhysicsBody
     /// End the movement but does not change the speed
     /// </summary>
     /// <param name="hit">The RaycastHit to snap at</param>
-    public void Snap(RaycastHit hit)
+    public void SnapAndStop(RaycastHit hit)
     {
         Vector3 normal = PhysicsSystem.CleanVector3(hit.normal).normalized;
         currentFramePosition = hit.point + (normal * halfExtent);
         remainingFrameDistance = 0;
+    }
+
+    /// <summary>
+    /// Continue moving through a body without altering trajectory
+    /// </summary>
+    /// <param name="hit">The RaycastHit to pass through</param>
+    public void PassThrough(RaycastHit hit)
+    {
+        Vector3 normal = PhysicsSystem.CleanVector3(hit.normal).normalized;
+        currentFramePosition = hit.point + (normal * halfExtent);
+        remainingFrameDistance -= hit.distance;
     }
 
     /// <summary>
@@ -201,7 +221,7 @@ public class BallBody : PhysicsBody
         {
             return;
         }
-        var copy_remainingFrameDistance = speed * Time.deltaTime;
+        var copy_remainingFrameDistance = speed * (Time.inFixedTimeStep ? Time.fixedDeltaTime : 0.02f);
         var copy_movementDirection = movementDirection;
         var copy_currentFramePosition = currentFramePosition;
         var trajectorySteps = new List<Vector3>(){copy_currentFramePosition};
@@ -212,7 +232,7 @@ public class BallBody : PhysicsBody
             Vector3 nextMovement = copy_movementDirection.normalized * copy_remainingFrameDistance;
             if(Physics.SphereCast(copy_currentFramePosition, halfExtent, copy_movementDirection.normalized, out RaycastHit hit, copy_remainingFrameDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
             {
-                if(hit.collider.TryGetComponent(out CollisionBody body))
+                if(hit.collider.TryGetComponent(out CollisionBody body) && body.bodyType!=BodyType.Player)
                 {
                     // Copy of Bounce
                     Vector3 normal = PhysicsSystem.CleanVector3(hit.normal).normalized;
@@ -220,7 +240,6 @@ public class BallBody : PhysicsBody
                     copy_remainingFrameDistance -= hit.distance;
                     Vector3 reflect = PhysicsSystem.CleanVector3(Vector3.Reflect(copy_movementDirection, hit.normal)).normalized;
                     copy_movementDirection = reflect;
-                    trajectorySteps.Add(copy_currentFramePosition);
                     bounceSpots.Add(copy_currentFramePosition);
                 }
             }
@@ -229,15 +248,20 @@ public class BallBody : PhysicsBody
                 copy_currentFramePosition += nextMovement;
                 copy_remainingFrameDistance = 0f;
             }
+            trajectorySteps.Add(copy_currentFramePosition);
         }
-
+        
         var lastStep = trajectorySteps[0];
         trajectorySteps.RemoveAt(0);
+        
+        // Start position for the frame
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(lastStep, halfExtent);
         
         Gizmos.color = Color.yellow;
         foreach (var trajectoryStep in trajectorySteps)
         {
-            Gizmos.DrawRay(lastStep, trajectoryStep);
+            Gizmos.DrawRay(lastStep, trajectoryStep-lastStep);
             lastStep = trajectoryStep;
         }
         Gizmos.color = Color.orange;
