@@ -16,6 +16,10 @@ public class SO_CameraParameters : ScriptableObject
     public float _maxCameraHeight;
     [Tooltip("Minimum hight on offset position on Y axis of the camera.")]
     public float _minCameraHeight;
+    [Tooltip("")]
+    public float _topLimitToOffset;
+    [Tooltip("")]
+    public float _bottomLimitToOffset;
     [Tooltip("Damping force of the camera Offset Follow In Y position.")]
     public float _dampingOffsetFollow;
     #endregion

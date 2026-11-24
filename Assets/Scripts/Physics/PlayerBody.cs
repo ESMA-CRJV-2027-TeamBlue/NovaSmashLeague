@@ -16,7 +16,8 @@ public class PlayerBody : PhysicsBody
     
     // Indications of how the body should react
     [Header("Behaviour")]
-    public Vector2 localGroundDirection;
+    [Tooltip("What direction should the body should, in world coordinates")]
+    public Vector2 worldGroundDirection;
     [Tooltip("Indicates to the body it should jump whenever possible")]
     public bool shouldJump;
     [Tooltip("Indicates to the body it should extrajump whenever possible")]
@@ -59,10 +60,10 @@ public class PlayerBody : PhysicsBody
         _currentFramePosition = rigidbody.position;
         _onGround = Physics.CapsuleCast(_capsulePoint1, _capsulePoint2, _extentX, Vector3.down, out var groundHit, _groundCheckLength);
         _currentFrameMovementRemaining = Vector3.zero;
-        
+
         #region Compute new horizontal velocity
-        Vector3 worldGroundDirection = transform.right *  localGroundDirection.x + transform.forward * localGroundDirection.y;
-        worldGroundDirection = new Vector2(worldGroundDirection.x, worldGroundDirection.z).normalized;
+        // = transform.right *  localGroundDirection.x + transform.forward * localGroundDirection.y;
+        //worldGroundDirection = new Vector2(worldGroundDirection.x, worldGroundDirection.z).normalized;
         Vector2 wantedVelocity = worldGroundDirection * movementMetrics.maxgroundSpeed;
         
         // Base acceleration when we want to move
@@ -210,7 +211,7 @@ public class PlayerBody : PhysicsBody
     private void OnGUI()
     {
         GUI.Label(new Rect(10f, 10f + 0 * 20f, 800f, 22f), $"Current ground velocity: {_currentGroundVelocity}");
-        GUI.Label(new Rect(10f, 10f + 1 * 20f, 800f, 22f), $"Wanted ground velocity: {localGroundDirection}");
+        GUI.Label(new Rect(10f, 10f + 1 * 20f, 800f, 22f), $"Wanted ground direction: {worldGroundDirection}");
         GUI.Label(new Rect(10f, 10f + 2 * 20f, 800f, 22f), $"Current vertical speed: {_currentVerticalSpeed}");
         GUI.Label(new Rect(10f, 10f + 3 * 20f, 800f, 22f), $"On ground: {_onGround}");
         GUI.Label(new Rect(10f, 10f + 4 * 20f, 800f, 22f), $"Extra jumps: {_extraJumpsRemaining}");

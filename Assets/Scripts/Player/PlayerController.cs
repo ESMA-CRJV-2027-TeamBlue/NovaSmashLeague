@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
 {
     private PlayerBody _body;
     private PlayerInput _playerInput;
+
+    [Tooltip("The pivot used for movement reference")]
+    public Transform pivot;
     
     [Tooltip("Buffer time for inputs")]
     public float bufferTime = 0.1f;
@@ -45,8 +48,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Continuously updates the movement inputs 
-        _body.localGroundDirection = _playerInput.rawDirection;
+        // Continuously updates the movement inputs
+        Vector3 groundDirection3D = pivot.right * _playerInput.rawDirection.x + pivot.forward * _playerInput.rawDirection.y;
+        _body.worldGroundDirection = new Vector2(groundDirection3D.x, groundDirection3D.z).normalized;
     }
     
     /// <summary>

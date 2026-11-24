@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 4363707309375561736}
   - component: {fileID: 690343026467471817}
   - component: {fileID: 8470678488402133229}
+  - component: {fileID: 5037531006097603924}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -358,13 +359,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5066873967426580644}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.39398518, y: -0.012133141, z: 0.005208141, w: -0.919022}
-  m_LocalPosition: {x: 0, y: 6.25, z: -5.54}
+  m_LocalRotation: {x: 0.08715578, y: -0, z: -0.0000000037252899, w: 0.9961947}
+  m_LocalPosition: {x: 1.0600004, y: 3.0299997, z: -6.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6060319821528240545}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 6933841434720291466}
+  m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
 --- !u!20 &4363707309375561736
 Camera:
   m_ObjectHideFlags: 0
@@ -468,6 +469,55 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &5037531006097603924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5066873967426580644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e7a5e91fd894cc4abf8704ce970b06d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
+  _ball: {fileID: 0}
+  _player: {fileID: 6060319821528240545}
+  _pivot: {fileID: 6933841434720291466}
+  _cameraParameters: {fileID: 11400000, guid: 96c5929d493e1ba4683fae53f5eeed17, type: 2}
+  _ballSpeedDebug: 1
+--- !u!1 &6651741901742019416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6933841434720291466}
+  m_Layer: 0
+  m_Name: CameraPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6933841434720291466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6651741901742019416}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3041503802242459840}
+  m_Father: {fileID: 6060319821528240545}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8709290684885010707
 GameObject:
   m_ObjectHideFlags: 0
@@ -503,7 +553,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3041503802242459840}
+  - {fileID: 6933841434720291466}
   - {fileID: 4402784326479642018}
   - {fileID: 3544363876380026853}
   m_Father: {fileID: 0}
@@ -571,7 +621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBody
   disablePhysics: 0
-  localGroundDirection: {x: 0, y: 0}
+  worldGroundDirection: {x: 0, y: 0}
   shouldJump: 0
   shouldExtraJump: 0
   shouldFloat: 0
@@ -622,11 +672,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
   rawDirection: {x: 0, y: 0}
   holdsJump: 0
-  pressedJump: 0
-  releasedJump: 0
   pressedAttack1: 0
   pressedAttack2: 0
   pressedBlock: 0
+  pressedJump:
+    m_PersistentCalls:
+      m_Calls: []
+  releasedJump:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1697244792153486453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -639,6 +693,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff13d9923f8802f47b4ccad3705b151b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  pivot: {fileID: 0}
+  bufferTime: 0.1
 --- !u!114 &4799078326683361086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -653,4 +709,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HumanPlayerInput
   isGamepad: 0
   gamepadIndex: 0
-  bufferTime: 0.1

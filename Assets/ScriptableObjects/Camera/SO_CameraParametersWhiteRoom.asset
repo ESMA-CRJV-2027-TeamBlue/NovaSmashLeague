@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c1c9bd44771f1840b47bb3b69d679cd, type: 3}
+  m_Name: SO_CameraParametersWhiteRoom
+  m_EditorClassIdentifier: Assembly-CSharp::SO_CameraParameters
+  _dampingRotationFollow: 0.5
+  _maxCameraHeight: 3
+  _minCameraHeight: 1
+  _topLimitToOffset: 0.8
+  _bottomLimitToOffset: 0.2
+  _dampingOffsetFollow: 0.001
+  _maxPositionYInArena: 31
+  _minPositionYInArena: 1.5
+  _maxCameraRotationX: 30
+  _minCameraRotationX: 0
+  _minCameraRotationXApexFollow: -45
+  _minCameraPositionYApexFollow: -3
+  _BallPositionToViewportApexFollow: 0.8
+  _dampingApexFollow: 0.001
