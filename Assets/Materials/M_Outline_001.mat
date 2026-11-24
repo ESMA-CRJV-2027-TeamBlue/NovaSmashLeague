@@ -105,12 +105,12 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _LineWidthMax: 0.028
+    - _LineWidthMax: 0.0725
     - _LineWidthMin: 0.0136
     - _Metallic: 0
-    - _NoiseIntensity: 5
+    - _NoiseIntensity: 0.77
     - _NoiseScale: 5
-    - _NoiseSpeed: 2.92
+    - _NoiseSpeed: 0.71
     - _OcclusionStrength: 1
     - _OutlineWidth: 0.005
     - _Parallax: 0.005
