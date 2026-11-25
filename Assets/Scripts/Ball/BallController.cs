@@ -24,6 +24,7 @@ public class BallController : MonoBehaviour
                 break;
             case BodyType.Player:
                 ballBody.PassThrough(hit);
+                ballBody.IgnoreBodyThisFrame(collisionBody);
                 break;
         }
     }

@@ -766,17 +766,29 @@ PrefabInstance:
       propertyPath: cameraToFace
       value: 
       objectReference: {fileID: 2120745821}
+    - target: {fileID: 2834381915148263997, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
+      propertyPath: speed
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2834381915148263997, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
+      propertyPath: movementDirection.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2834381915148263997, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
+      propertyPath: movementDirection.y
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 7951521741393365922, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
       propertyPath: m_Interpolate
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8112569318770349144, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -36.91
+      value: 1.89
       objectReference: {fileID: 0}
     - target: {fileID: 8112569318770349144, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15.71
+      value: 5.08
       objectReference: {fileID: 0}
     - target: {fileID: 8112569318770349144, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
       propertyPath: m_LocalPosition.z

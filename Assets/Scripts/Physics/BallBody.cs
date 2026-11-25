@@ -16,6 +16,8 @@ public class BallBody : PhysicsBody
     [Header("Data")]
     [Tooltip("The data for the ball behaviour")]
     public SO_BallPreset ballPreset;
+    [Tooltip("Extra space used for raycasts to prevent interpenetrating a wall")]
+    [SerializeField] private float _skinWidth = 0.01f;
     
     private SO_BallSpeedLevel _currentSpeedLevel;
     private int _currentSpeedIndex;
@@ -30,6 +32,7 @@ public class BallBody : PhysicsBody
     private Vector3 currentFramePosition;
     private float remainingFrameDistance;
     private List<CollisionBody> _collisionBodiesToIgnoreThisFrame = new List<CollisionBody>();
+    private Collider[] _overlapBodies = new Collider[10];
 
     [Header("Events / feedbacks")]
     [Tooltip("Emitted when the ball collides with something. Gives the CollisionBody we collided with, and the RaycastHit of the collision.")]
@@ -64,6 +67,31 @@ public class BallBody : PhysicsBody
     /// <param name="deltaTime">The time ellapsed since last physics frame</param>
     public override void PhysicsTick(float deltaTime)
     {
+        if(disablePhysics) return;
+        
+        currentFramePosition = rigidbody.position;
+        // TODO : overlap event
+        var overlapCount = Physics.OverlapSphereNonAlloc(currentFramePosition, halfExtent, _overlapBodies);
+        Vector3 depenetrationMovement = Vector3.zero;
+        for(int i=0; i<overlapCount; i++)
+        {
+            Collider otherCollider = _overlapBodies[i];
+            if (otherCollider == collider) continue;
+            if (otherCollider.TryGetComponent<CollisionBody>(out CollisionBody collisionBody))
+            {
+                if (collisionBody.bodyType == BodyType.Wall)
+                {
+                    if (Physics.ComputePenetration(collider, currentFramePosition, Quaternion.identity, otherCollider,
+                            collisionBody.transform.position, collisionBody.transform.rotation,
+                            out var depenetrationDirection, out var depenetrationDistance))
+                    {
+                        depenetrationMovement += depenetrationDirection * (depenetrationDistance+_skinWidth);
+                    }
+                }
+            }
+        }
+
+        currentFramePosition += depenetrationMovement;
         remainingFrameDistance = speed * deltaTime;
         int currentIteration = 0;
         _collisionBodiesToIgnoreThisFrame.Clear();
@@ -71,23 +99,38 @@ public class BallBody : PhysicsBody
         {
             CheckCollisionAhead();
         }
-        transform.position = currentFramePosition;
+        rigidbody.position = currentFramePosition;
     }
 
+    /// <summary>
+    /// Specifies a body to ignore during the remainder of the frame movement
+    /// Useful to ignore players or pass-through objects
+    /// </summary>
+    /// <param name="body">The CollisionBody to ignore</param>
+    public void IgnoreBodyThisFrame(CollisionBody body)
+    {
+        _collisionBodiesToIgnoreThisFrame.Add(body);
+    }
+
+    /// <summary>
+    /// Tries to move in the current direction from the current position
+    /// Reacts to any CollisionBody founf along the way by firing OnBodyCollisionEvent
+    /// </summary>
     public void CheckCollisionAhead()
     {
         Vector3 nextMovement = movementDirection.normalized * remainingFrameDistance;
         if(
-            Physics.SphereCast(currentFramePosition, halfExtent, movementDirection.normalized, out RaycastHit hit, remainingFrameDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
+            Physics.SphereCast(currentFramePosition, halfExtent, movementDirection.normalized, out RaycastHit hit, remainingFrameDistance+_skinWidth, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
             && hit.collider.TryGetComponent(out CollisionBody body)
             && !_collisionBodiesToIgnoreThisFrame.Contains(body)
         )
         {
+            // Reaction to the collision is handled externally
             OnBodyCollision?.Invoke(body, hit);
-            _collisionBodiesToIgnoreThisFrame.Add(body);
         }
         else
         {
+            // If no collision occured, move normally
             currentFramePosition += nextMovement;
             remainingFrameDistance = 0f;
         }
@@ -241,6 +284,11 @@ public class BallBody : PhysicsBody
                     Vector3 reflect = PhysicsSystem.CleanVector3(Vector3.Reflect(copy_movementDirection, hit.normal)).normalized;
                     copy_movementDirection = reflect;
                     bounceSpots.Add(copy_currentFramePosition);
+                }
+                else
+                {
+                    copy_currentFramePosition += nextMovement;
+                    copy_remainingFrameDistance = 0f;
                 }
             }
             else

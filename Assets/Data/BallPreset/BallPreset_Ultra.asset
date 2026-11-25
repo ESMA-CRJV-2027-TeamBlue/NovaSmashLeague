@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f686e8208493d54089fdf0fb07db2b3, type: 3}
   m_Name: BallPreset_Ultra
   m_EditorClassIdentifier: Assembly-CSharp::SO_BallPreset
-  baseSpeed: 10
+  baseSpeed: 1000
   baseDamage: 10
   speedLevels:
   - {fileID: 11400000, guid: 22b3ea8bcd40e2249ab9424a9bac258c, type: 2}
