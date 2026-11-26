@@ -12,6 +12,8 @@ public class DynamicBody : PhysicsBody
     public Vector3 movementDirection;
     [Tooltip("The speed of this body, in unit/second")]
     public float speed = 5f;
+    
+    public Vector3 velocity => movementDirection * speed;
 
     protected float halfExtent;
     protected Vector3 currentFramePosition;

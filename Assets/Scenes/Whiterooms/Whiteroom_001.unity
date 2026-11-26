@@ -503,6 +503,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 8bf947180444b2842a72ba80505a6d3b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6c4e2c671b0d8c74aa9d652416575084, type: 2}
     - target: {fileID: 919132149155446097, guid: 8bf947180444b2842a72ba80505a6d3b, type: 3}
       propertyPath: m_Name
       value: SM_ENV_WhiteRoom_001
@@ -520,6 +524,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8bf947180444b2842a72ba80505a6d3b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1844247591}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8bf947180444b2842a72ba80505a6d3b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1844247594}
   m_SourcePrefab: {fileID: 100100000, guid: 8bf947180444b2842a72ba80505a6d3b, type: 3}
 --- !u!1 &1844247590 stripped
 GameObject:
@@ -588,6 +595,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6006268899239478663, guid: 8bf947180444b2842a72ba80505a6d3b, type: 3}
+--- !u!114 &1844247594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844247590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a295b9646bf3234796c5fda1c5fa3dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionBody
+  bodyType: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

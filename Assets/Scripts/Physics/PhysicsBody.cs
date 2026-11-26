@@ -3,6 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(CollisionBody))]
 public abstract class PhysicsBody : MonoBehaviour
 {
     protected Rigidbody rigidbody;
@@ -43,6 +44,7 @@ public abstract class PhysicsBody : MonoBehaviour
         }
         rb.useGravity = false;
         rb.isKinematic = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
     
