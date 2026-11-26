@@ -16,11 +16,11 @@ MonoBehaviour:
   _maxCameraHeight: 3
   _minCameraHeight: 1
   _topLimitToOffset: 0.8
-  _bottomLimitToOffset: 0.2
+  _bottomLimitToOffset: 0.4
   _dampingOffsetFollow: 0.001
   _maxPositionYInArena: 31
   _minPositionYInArena: 1.5
-  _maxCameraRotationX: 30
+  _maxCameraRotationX: 45
   _minCameraRotationX: 0
   _minCameraRotationXApexFollow: -45
   _minCameraPositionYApexFollow: -3

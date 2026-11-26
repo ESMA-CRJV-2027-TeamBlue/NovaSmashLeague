@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Jobs;
 
@@ -10,8 +11,10 @@ public class CameraFollow : MonoBehaviour
     private Rigidbody _ballRb;
     [Tooltip("Player gameObject's transform.")]
     [SerializeField] private Transform _player;
-    [Tooltip("Camera Pivot gameObject's transform.")]
-    [SerializeField] private Transform _pivot;
+    [Tooltip("Camera Pivot On player gameObject's transform.")]
+    [SerializeField] private Transform _pivotOnPlayer;
+    [Tooltip("Camera Pivot Offset from player gameObject's transform.")]
+    [SerializeField] private Transform _pivotOffset;
     private Camera _camera;
     #endregion
 
@@ -26,6 +29,8 @@ public class CameraFollow : MonoBehaviour
     [Header("DEBUG Parameters :")]
     [Tooltip("DEBUG Variable simulating the ballSpeed value.")]
     public int _ballSpeedDebug;
+
+    private float rotationX = 0f;
     #endregion
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -54,7 +59,7 @@ public class CameraFollow : MonoBehaviour
 
     private void PivotFollow()
     {
-        _pivot.transform.position = Vector3.Lerp(_pivot.transform.position, _player.transform.position, 10f * Time.deltaTime);
+        _pivotOnPlayer.transform.position = Vector3.Lerp(_pivotOnPlayer.transform.position, _player.transform.position, 10f * Time.deltaTime);
     }
 
     /// <summary>
@@ -62,11 +67,11 @@ public class CameraFollow : MonoBehaviour
     /// </summary>
     private void RotationY()
     {
-        Vector3 direction = _ball.transform.position - _pivot.transform.position;
+        Vector3 direction = _ball.transform.position - _pivotOnPlayer.transform.position;
         direction.y = 0f;
         Quaternion TargetRotation = Quaternion.LookRotation(direction);
-        Quaternion rotation = Quaternion.Lerp(_pivot.rotation, TargetRotation, Mathf.Lerp(_cameraParameters._dampingRotationFollow, _cameraParameters._dampingRotationFollow * 10, 1- _ballSpeedDebug / 10f) * Time.deltaTime);
-        _pivot.eulerAngles = new Vector3(_pivot.localEulerAngles.x, rotation.eulerAngles.y, 0f);
+        Quaternion rotation = Quaternion.Lerp(_pivotOnPlayer.rotation, TargetRotation, Mathf.Lerp(_cameraParameters._dampingRotationFollow, _cameraParameters._dampingRotationFollow * 10, 1- _ballSpeedDebug / 10f) * Time.deltaTime);
+        _pivotOnPlayer.eulerAngles = new Vector3(_pivotOnPlayer.localEulerAngles.x, rotation.eulerAngles.y, 0f);
     }
 
     /// <summary>
@@ -92,24 +97,23 @@ public class CameraFollow : MonoBehaviour
         Vector3 ballScreenPosition = _camera.WorldToViewportPoint(_ball.transform.position);
 
         Vector3 unrotatedBallPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * _ball.transform.position;
-
         Vector3 unrotatedCameraPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * _camera.transform.position;
         float offsetP = 0.5f;
-        Vector3 targetPosition = new Vector3(0f, transform.localPosition.y, 0f);
+        Vector3 targetPosition = new Vector3(0f, _pivotOffset.localPosition.y, 0f);
 
         if (ballScreenPosition.y > _cameraParameters._topLimitToOffset)
         {
             float Y = unrotatedBallPosition.y - unrotatedCameraPosition.y;
             float delta = Y - ((_cameraParameters._topLimitToOffset - offsetP) * Y) / (ballScreenPosition.y-offsetP);
-            targetPosition = _camera.transform.localPosition + Vector3.up * delta;
+            targetPosition = _pivotOffset.localPosition + Vector3.up * delta;
         }
         else if (ballScreenPosition.y < _cameraParameters._bottomLimitToOffset)
         {
             float Y = unrotatedBallPosition.y - unrotatedCameraPosition.y;
             float delta = Y - ((_cameraParameters._bottomLimitToOffset- offsetP) *Y) / (ballScreenPosition.y- offsetP);
-            targetPosition = _camera.transform.localPosition + Vector3.up * delta;
+            targetPosition = _pivotOffset.localPosition + Vector3.up * delta;
         }
-        transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(targetPosition.y, _cameraParameters._minCameraHeight, _cameraParameters._maxCameraHeight), transform.localPosition.z);
+        _pivotOffset.localPosition = new Vector3(_pivotOffset.localPosition.x, Mathf.Clamp(targetPosition.y, _cameraParameters._minCameraHeight, _cameraParameters._maxCameraHeight), _pivotOffset.localPosition.z);
     }
 
     /// <summary>
@@ -117,7 +121,7 @@ public class CameraFollow : MonoBehaviour
     /// </summary>
     private void RotationX()
     {
-        transform.localEulerAngles = new Vector3(CameraAngleXValue(), transform.localEulerAngles.y, transform.localEulerAngles.z);
+        _pivotOffset.localEulerAngles = new Vector3(CameraAngleXValue(), _pivotOffset.localEulerAngles.y, _pivotOffset.localEulerAngles.z);
     }
 
     /// <summary>
@@ -138,13 +142,15 @@ public class CameraFollow : MonoBehaviour
     private bool ApexFollowCondition()
     {
         Vector3 ballScreenPosition = _camera.WorldToViewportPoint(_ball.transform.position);
-        if (!_switch && transform.localPosition.y >= _cameraParameters._maxCameraHeight && ballScreenPosition.y >= 0.9f)
+        if (!_switch && _pivotOffset.localPosition.y >= _cameraParameters._maxCameraHeight && ballScreenPosition.y >= 0.9f)
         {
             _switch = true;
+            Debug.Log("Switch Go True.");
         }
-        else if(_switch && transform.localPosition.y >= _cameraParameters._maxCameraHeight && ballScreenPosition.y <= 0.9f)
+        else if(_switch && _pivotOffset.localEulerAngles.x == CameraAngleXValue() && ballScreenPosition.y <= 0.8f)
         {
             _switch = false;
+            Debug.Log("Switch Go False.");
         }
         return _switch;
     }
@@ -155,15 +161,61 @@ public class CameraFollow : MonoBehaviour
     private void ApexFollow()
     {
         Vector3 ballScreenPosition = _camera.WorldToViewportPoint(_ball.transform.position);
-
-        if ( (ballScreenPosition.y > _cameraParameters._BallPositionToViewportApexFollow && transform.localPosition.y > _cameraParameters._minCameraPositionYApexFollow) || (ballScreenPosition.y < _cameraParameters._BallPositionToViewportApexFollow && transform.localPosition.y < _cameraParameters._maxCameraHeight) )
+        if (ballScreenPosition.y > 0.9f)
         {
-            float positionY = transform.localPosition.y - (_ballRb.linearVelocity.y * Mathf.Lerp(_cameraParameters._dampingApexFollow, _cameraParameters._dampingApexFollow * 10, 1 - _ballSpeedDebug / 10f));
-            transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Clamp(positionY, _cameraParameters._minCameraPositionYApexFollow, _cameraParameters._maxCameraHeight), transform.localPosition.z);
-
-            float rotationX = Mathf.Lerp(_cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue(), Mathf.InverseLerp(_cameraParameters._minCameraPositionYApexFollow, _cameraParameters._maxCameraHeight, transform.localPosition.y));
-            transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), transform.localEulerAngles.y, transform.localEulerAngles.z);
+            float rotationA = Mathf.Atan2(_cameraParameters._BallPositionToViewportApexFollow - 0.5f, -transform.localPosition.z) * Mathf.Rad2Deg - 10f;
+            float rotationB = Mathf.Atan2(ballScreenPosition.y - 0.5f, -transform.localPosition.z) * Mathf.Rad2Deg - 10f;
+            float targetRotationX = rotationB - rotationA;
+            rotationX = _pivotOffset.localEulerAngles.x - targetRotationX;
+            if (rotationX > 180f) rotationX -= 360f;
+            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
         }
+        else if (ballScreenPosition.y < 0.8f)
+        {
+            float rotationA = Mathf.Atan2(_cameraParameters._BallPositionToViewportApexFollow - 0.5f, -transform.localPosition.z) * Mathf.Rad2Deg + 10f;
+            float rotationB = Mathf.Atan2(ballScreenPosition.y - 0.5f, -transform.localPosition.z) * Mathf.Rad2Deg + 10f;
+            float targetRotationX = rotationB - rotationA;
+            rotationX = _pivotOffset.localEulerAngles.x - targetRotationX;
+            if (rotationX > 180f) rotationX -= 360f;
+            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
+        }
+    }
+
+    private void ApexFollowPolish()
+    {
+        Vector3 unrotatedBallPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * _ball.transform.position;
+        Vector3 unrotatedCameraPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * _camera.transform.position;
+        float offsetP = 0.5f;
+        Vector3 ballScreenPosition = _camera.WorldToViewportPoint(_ball.transform.position);
+        if (ballScreenPosition.y > _cameraParameters._BallPositionToViewportApexFollow)
+        {
+            float Y = unrotatedBallPosition.y - unrotatedCameraPosition.y;
+            float delta = Y - ((_cameraParameters._BallPositionToViewportApexFollow - offsetP) * Y) / (ballScreenPosition.y - offsetP);
+
+            float distance = Vector3.Distance(transform.position, _ball.transform.position);
+
+            float targetRotation = Mathf.Atan2(delta, distance) * Mathf.Rad2Deg;
+            rotationX = Mathf.DeltaAngle(_pivotOffset.localEulerAngles.x, targetRotation);
+
+            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
+        }
+        else if (ballScreenPosition.y < 0.8f)
+        {
+            float Y = unrotatedBallPosition.y - unrotatedCameraPosition.y;
+            float delta = Y - ((0.8f - offsetP) * Y) / (ballScreenPosition.y - offsetP);
+
+            float distance = Vector3.Distance(transform.position, _ball.transform.position);
+
+            float targetRotation = Mathf.Atan2(delta, distance) * Mathf.Rad2Deg;
+            rotationX = Mathf.DeltaAngle(_pivotOffset.localEulerAngles.x, targetRotation);
+
+            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
+        }
+    }
+
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(500f, 10f, 800f, 100f), "Angle Value : " + rotationX);
     }
 
     /// <summary>
