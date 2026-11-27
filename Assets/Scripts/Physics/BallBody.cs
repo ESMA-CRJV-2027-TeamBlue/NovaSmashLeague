@@ -100,6 +100,13 @@ public class BallBody : PhysicsBody
             CheckCollisionAhead();
         }
         rigidbody.position = currentFramePosition;
+        foreach (var body in _collisionBodiesToIgnoreThisFrame)
+        {
+            if (body.TryGetComponent(out Collider otherCollider))
+            {
+                otherCollider.attachedRigidbody.detectCollisions = true;
+            }
+        }
     }
 
     /// <summary>
@@ -109,6 +116,10 @@ public class BallBody : PhysicsBody
     /// <param name="body">The CollisionBody to ignore</param>
     public void IgnoreBodyThisFrame(CollisionBody body)
     {
+        if (body.TryGetComponent(out Collider otherCollider))
+        {
+            otherCollider.attachedRigidbody.detectCollisions = false;
+        }
         _collisionBodiesToIgnoreThisFrame.Add(body);
     }
 
@@ -122,7 +133,6 @@ public class BallBody : PhysicsBody
         if(
             Physics.SphereCast(currentFramePosition, halfExtent, movementDirection.normalized, out RaycastHit hit, remainingFrameDistance+_skinWidth, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
             && hit.collider.TryGetComponent(out CollisionBody body)
-            && !_collisionBodiesToIgnoreThisFrame.Contains(body)
         )
         {
             // Reaction to the collision is handled externally
@@ -161,17 +171,6 @@ public class BallBody : PhysicsBody
         Vector3 normal = PhysicsSystem.CleanVector3(hit.normal).normalized;
         currentFramePosition = hit.point + (normal * halfExtent);
         remainingFrameDistance = 0;
-    }
-
-    /// <summary>
-    /// Continue moving through a body without altering trajectory
-    /// </summary>
-    /// <param name="hit">The RaycastHit to pass through</param>
-    public void PassThrough(RaycastHit hit)
-    {
-        Vector3 normal = PhysicsSystem.CleanVector3(hit.normal).normalized;
-        currentFramePosition = hit.point + (normal * halfExtent);
-        remainingFrameDistance -= hit.distance;
     }
 
     /// <summary>
@@ -275,7 +274,7 @@ public class BallBody : PhysicsBody
             Vector3 nextMovement = copy_movementDirection.normalized * copy_remainingFrameDistance;
             if(Physics.SphereCast(copy_currentFramePosition, halfExtent, copy_movementDirection.normalized, out RaycastHit hit, copy_remainingFrameDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
             {
-                if(hit.collider.TryGetComponent(out CollisionBody body) && body.bodyType!=BodyType.Player)
+                if(hit.collider.TryGetComponent(out CollisionBody body) && body.bodyType==BodyType.Wall)
                 {
                     // Copy of Bounce
                     Vector3 normal = PhysicsSystem.CleanVector3(hit.normal).normalized;
@@ -284,11 +283,6 @@ public class BallBody : PhysicsBody
                     Vector3 reflect = PhysicsSystem.CleanVector3(Vector3.Reflect(copy_movementDirection, hit.normal)).normalized;
                     copy_movementDirection = reflect;
                     bounceSpots.Add(copy_currentFramePosition);
-                }
-                else
-                {
-                    copy_currentFramePosition += nextMovement;
-                    copy_remainingFrameDistance = 0f;
                 }
             }
             else

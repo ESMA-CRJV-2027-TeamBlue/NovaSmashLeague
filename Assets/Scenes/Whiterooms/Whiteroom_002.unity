@@ -772,7 +772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2834381915148263997, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
       propertyPath: movementDirection.x
-      value: -1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2834381915148263997, guid: 64c7d36393e738c4e926f255eeadf886, type: 3}
       propertyPath: movementDirection.y
