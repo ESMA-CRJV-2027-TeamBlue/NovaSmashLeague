@@ -58,7 +58,7 @@ public class PlayerBody : PhysicsBody
         
         // Init data for this frame
         _currentFramePosition = rigidbody.position;
-        _onGround = Physics.CapsuleCast(_capsulePoint1, _capsulePoint2, _extentX, Vector3.down, out var groundHit, _groundCheckLength);
+        _onGround = Physics.CapsuleCast(_capsulePoint1, _capsulePoint2, _extentX, Vector3.down, out var groundHit, _groundCheckLength, LayerMask.GetMask("Wall"));
         _currentFrameMovementRemaining = Vector3.zero;
 
         #region Compute new horizontal velocity

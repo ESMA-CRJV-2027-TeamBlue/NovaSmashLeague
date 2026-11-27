@@ -23,7 +23,8 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private SO_CameraParameters _cameraParameters;
     #endregion
 
-    private bool _switch = false;
+    private bool _isApex = false;
+    private float _maxAngleX;
 
     #region DEBUG
     [Header("DEBUG Parameters :")]
@@ -43,17 +44,19 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RotationY();
-        PivotFollow();
-        if(ApexFollowCondition())
+        _maxAngleX = ComputeMaxXAngleForHeight();
+        _isApex = ApexFollowCondition();
+        if (_isApex)
         {
-            ApexFollow();
+            ApexFollowPolish();
         }
         else
         {
             OffsetY();
             RotationX();
         }
+        RotationY();
+        PivotFollow();
         BallSpeedDEBUG();
     }
 
@@ -116,19 +119,44 @@ public class CameraFollow : MonoBehaviour
         _pivotOffset.localPosition = new Vector3(_pivotOffset.localPosition.x, Mathf.Clamp(targetPosition.y, _cameraParameters._minCameraHeight, _cameraParameters._maxCameraHeight), _pivotOffset.localPosition.z);
     }
 
+    private void OffsetYPolish()
+    {
+        Vector3 ballScreenPosition = _camera.WorldToViewportPoint(_ball.transform.position);
+
+        Vector3 unrotatedBallPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * Quaternion.AngleAxis(-_pivotOffset.localEulerAngles.x, _pivotOffset.right) * _ball.transform.position;
+        Vector3 unrotatedCameraPivotPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * Quaternion.AngleAxis(-_pivotOffset.localEulerAngles.x, _pivotOffset.right) * _pivotOffset.position;
+        Vector3 unrotatedCameraPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * Quaternion.AngleAxis(-_pivotOffset.localEulerAngles.x, _pivotOffset.right) * transform.position;
+        float offsetP = 0.5f;
+        Vector3 targetPosition = new Vector3(0f, _pivotOffset.localPosition.y, 0f);
+
+        if (ballScreenPosition.y > _cameraParameters._topLimitToOffset)
+        {
+            float Y = unrotatedBallPosition.y - unrotatedCameraPosition.y;
+            float delta = Y - ((_cameraParameters._topLimitToOffset - offsetP) * Y) / (ballScreenPosition.y - offsetP);
+            targetPosition = _pivotOffset.localPosition + Vector3.up * delta;
+        }
+        else if (ballScreenPosition.y < _cameraParameters._bottomLimitToOffset)
+        {
+            float Y = unrotatedBallPosition.y - unrotatedCameraPosition.y;
+            float delta = Y - ((_cameraParameters._bottomLimitToOffset - offsetP) * Y) / (ballScreenPosition.y - offsetP);
+            targetPosition = _pivotOffset.localPosition + Vector3.up * delta;
+        }
+        _pivotOffset.localPosition = new Vector3(_pivotOffset.localPosition.x, Mathf.Clamp(targetPosition.y, _cameraParameters._minCameraHeight, _cameraParameters._maxCameraHeight), _pivotOffset.localPosition.z);
+    }
+
     /// <summary>
     /// Rotate the camera on X.
     /// </summary>
     private void RotationX()
     {
-        _pivotOffset.localEulerAngles = new Vector3(CameraAngleXValue(), _pivotOffset.localEulerAngles.y, _pivotOffset.localEulerAngles.z);
+        _pivotOffset.localEulerAngles = new Vector3(_maxAngleX, _pivotOffset.localEulerAngles.y, _pivotOffset.localEulerAngles.z);
     }
 
     /// <summary>
     /// Calculate the camera rotation x value, from the hight of the character in the arena.
     /// </summary>
     /// <returns>Camera rotation X value (float).</returns>
-    private float CameraAngleXValue()
+    private float ComputeMaxXAngleForHeight()
     {
         float percent = _player.position.y / (_cameraParameters._maxPositionYInArena - _cameraParameters._minPositionYInArena);
         float rotationX = Mathf.Lerp(_cameraParameters._minCameraRotationX, _cameraParameters._maxCameraRotationX, percent);
@@ -141,18 +169,34 @@ public class CameraFollow : MonoBehaviour
     /// <returns>True or False.</returns>
     private bool ApexFollowCondition()
     {
+        bool newApex = _isApex;
         Vector3 ballScreenPosition = _camera.WorldToViewportPoint(_ball.transform.position);
-        if (!_switch && _pivotOffset.localPosition.y >= _cameraParameters._maxCameraHeight && ballScreenPosition.y >= 0.9f)
+        if (!_isApex)
         {
-            _switch = true;
-            Debug.Log("Switch Go True.");
+            if(_pivotOffset.localPosition.y >= _cameraParameters._maxCameraHeight && ballScreenPosition.y >= _cameraParameters._BallPositionToViewportApexFollow)
+            {
+                newApex = true;
+            }
         }
-        else if(_switch && _pivotOffset.localEulerAngles.x == CameraAngleXValue() && ballScreenPosition.y <= 0.8f)
+        else
         {
-            _switch = false;
-            Debug.Log("Switch Go False.");
+            var refAngle = _pivotOffset.eulerAngles.x;
+            if (refAngle > 180f) refAngle -= 360f;
+            //if(ballScreenPosition.y < _cameraParameters._BallPositionToViewportApexFollow-0.1f)
+            if (refAngle >= _maxAngleX)
+            {
+                newApex = false;
+            }
         }
-        return _switch;
+        //if(_isApex && Mathf.DeltaAngle(_pivotOffset.localEulerAngles.x, _maxAngleX) <0.01f)
+        //{
+        //    _isApex = false;
+        //}
+        //else if (!_isApex && _pivotOffset.localPosition.y >= _cameraParameters._maxCameraHeight && ballScreenPosition.y >= _cameraParameters._BallPositionToViewportApexFollow)
+        //{
+        //    _isApex = true;
+        //}
+        return newApex;
     }
 
     /// <summary>
@@ -168,7 +212,7 @@ public class CameraFollow : MonoBehaviour
             float targetRotationX = rotationB - rotationA;
             rotationX = _pivotOffset.localEulerAngles.x - targetRotationX;
             if (rotationX > 180f) rotationX -= 360f;
-            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
+            _pivotOffset.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, ComputeMaxXAngleForHeight()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
         }
         else if (ballScreenPosition.y < 0.8f)
         {
@@ -177,45 +221,45 @@ public class CameraFollow : MonoBehaviour
             float targetRotationX = rotationB - rotationA;
             rotationX = _pivotOffset.localEulerAngles.x - targetRotationX;
             if (rotationX > 180f) rotationX -= 360f;
-            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
+            _pivotOffset.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, ComputeMaxXAngleForHeight()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
         }
     }
 
+    /// <summary>
+    /// Apex Follow that permite to follow the ball when the normal follow get to his limit.
+    /// </summary>
     private void ApexFollowPolish()
     {
-        Vector3 unrotatedBallPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * _ball.transform.position;
-        Vector3 unrotatedCameraPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * _camera.transform.position;
+        Vector3 unrotatedBallPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * Quaternion.AngleAxis(-_pivotOffset.localEulerAngles.x, _pivotOffset.right) * _ball.transform.position;
+        Vector3 unrotatedCameraPivotPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * Quaternion.AngleAxis(-_pivotOffset.localEulerAngles.x, _pivotOffset.right) * _pivotOffset.position;
+        Vector3 unrotatedCameraPosition = Quaternion.AngleAxis(-_camera.transform.localEulerAngles.x, _camera.transform.right) * Quaternion.AngleAxis(-_pivotOffset.localEulerAngles.x, _pivotOffset.right) * transform.position;
         float offsetP = 0.5f;
         Vector3 ballScreenPosition = _camera.WorldToViewportPoint(_ball.transform.position);
-        if (ballScreenPosition.y > _cameraParameters._BallPositionToViewportApexFollow)
+
+        if (ballScreenPosition.y > _cameraParameters._BallPositionToViewportApexFollow || ballScreenPosition.y < _cameraParameters._BallPositionToViewportApexFollow)
         {
-            float Y = unrotatedBallPosition.y - unrotatedCameraPosition.y;
+            float Y = unrotatedBallPosition.y - unrotatedCameraPivotPosition.y;
             float delta = Y - ((_cameraParameters._BallPositionToViewportApexFollow - offsetP) * Y) / (ballScreenPosition.y - offsetP);
-
-            float distance = Vector3.Distance(transform.position, _ball.transform.position);
-
-            float targetRotation = Mathf.Atan2(delta, distance) * Mathf.Rad2Deg;
-            rotationX = Mathf.DeltaAngle(_pivotOffset.localEulerAngles.x, targetRotation);
-
-            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
-        }
-        else if (ballScreenPosition.y < 0.8f)
-        {
-            float Y = unrotatedBallPosition.y - unrotatedCameraPosition.y;
-            float delta = Y - ((0.8f - offsetP) * Y) / (ballScreenPosition.y - offsetP);
-
-            float distance = Vector3.Distance(transform.position, _ball.transform.position);
+            float distance = Vector3.Distance(unrotatedCameraPosition, unrotatedBallPosition);
 
             float targetRotation = Mathf.Atan2(delta, distance) * Mathf.Rad2Deg;
-            rotationX = Mathf.DeltaAngle(_pivotOffset.localEulerAngles.x, targetRotation);
-
-            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, CameraAngleXValue()), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
+            
+            rotationX = Mathf.DeltaAngle(targetRotation,_pivotOffset.localEulerAngles.x);
+            // Damping PlaceHolder
+            //rotationX = Mathf.Lerp(rotationX, _pivotOffset.localEulerAngles.x, Mathf.Lerp(0f, _cameraParameters._dampingApexFollow,_ballSpeedDebug / 10f) * Time.deltaTime);
+            //rotationX = Mathf.Lerp(_pivotOffset.localEulerAngles.x, rotationX, Mathf.Lerp(_cameraParameters._dampingApexFollow, _cameraParameters._dampingApexFollow * 10f, 1 - _ballSpeedDebug / 10f) * Time.deltaTime);
+            _pivotOffset.transform.localEulerAngles = new Vector3(Mathf.Clamp(rotationX, _cameraParameters._minCameraRotationXApexFollow, _maxAngleX), _pivotOffset.transform.localEulerAngles.y, _pivotOffset.transform.localEulerAngles.z);
         }
     }
 
     private void OnGUI()
     {
-        GUI.Label(new Rect(500f, 10f, 800f, 100f), "Angle Value : " + rotationX);
+        GUI.Label(new Rect(500f, 10f, 800f, 100f), "Wanted Angle X Value : " + rotationX);
+        GUI.Label(new Rect(500f, 30f, 800f, 100f), "Max Angles X : " + _maxAngleX);
+        GUI.Label(new Rect(500f, 50f, 800f, 100f), "Local pivot euleur X Value : " + _pivotOffset.localEulerAngles.x);
+        GUI.Label(new Rect(500f, 70f, 800f, 100f), "isApex : " + _isApex);
+        GUI.Label(new Rect(500f, 110f, 800f, 100f), "Current camera height : " + _pivotOffset.localPosition.y);
+        GUI.Label(new Rect(500f, 130f, 800f, 100f), "Max camera height : " + _cameraParameters._maxCameraHeight);
     }
 
     /// <summary>

@@ -36,7 +36,7 @@ public class SO_CameraParameters : ScriptableObject
     public float _minCameraRotationX;
     #endregion
 
-    #region Should
+    #region Apex
     [Header("Apex Follow Parameters :")]
     [Tooltip("Minimal X Rotation of the camera on the Apex Follow.")]
     public float _minCameraRotationXApexFollow;
